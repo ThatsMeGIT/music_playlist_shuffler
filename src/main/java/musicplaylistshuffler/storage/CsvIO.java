@@ -18,6 +18,7 @@ public class CsvIO {
                     System.out.println(line);
                 }
             } catch (FileNotFoundException e) {
+                //log
                 System.out.println(e);
             }
         }
