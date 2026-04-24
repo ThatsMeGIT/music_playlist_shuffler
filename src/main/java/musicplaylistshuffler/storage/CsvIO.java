@@ -9,8 +9,7 @@ import java.util.Scanner;
 public class CsvIO {
 
     public void printCsv(String path) {
-        FileUtils fileUtils = new FileUtils();
-        if (fileUtils.fileExists(path) && fileUtils.isFileReadable(path) && fileUtils.hasValidFormat(path, "csv")){
+        if (FileUtils.fileExists(path) && FileUtils.isFileReadable(path) && FileUtils.hasValidFormat(path, "csv")){
 
             try (Scanner scanner = new Scanner(new File(path))) {
                 while (scanner.hasNextLine()) {
