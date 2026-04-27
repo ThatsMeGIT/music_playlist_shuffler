@@ -1,4 +1,4 @@
 package musicplaylistshuffler.utils;
 
-public class Playlist {
+public class Skip {
 }

@@ -19,5 +19,7 @@ public class MusicPlaylistShuffler {
         for (Song song : playlist.getSongs()) {
             System.out.println(song.getTitle() + " | " + song.getArtist() + " | " + song.getDuration() + "s | " + song.getGenre());
         }
+
     }
+
 }
