@@ -22,4 +22,22 @@ class SongTest {
         assertThrows(IllegalArgumentException.class, () ->
                 new Song(" ", "Artist", 120, "Pop"));
     }
+
+    @Test
+    void shouldThrowWhenArtistIsBlank() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Song("Test", "", 120, "Pop"));
+    }
+
+    @Test
+    void shouldThrowWhenDurationIsNotPositive() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Song("Test", "Artist", 0, "Pop"));
+    }
+
+    @Test
+    void shouldThrowWhenGenreIsBlank() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new Song(" ", "Artist", 120, "Pop"));
+    }
 }
