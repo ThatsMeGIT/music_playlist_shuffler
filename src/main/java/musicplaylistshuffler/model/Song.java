@@ -1,4 +1,4 @@
-package main.java.musicplaylistshuffler.model;
+package musicplaylistshuffler.model;
 
 public class Song {
     private String title;

@@ -1,4 +1,4 @@
-package main.java.musicplaylistshuffler.model;
+package musicplaylistshuffler.model;
 
 import java.util.ArrayList;
 import java.util.List;

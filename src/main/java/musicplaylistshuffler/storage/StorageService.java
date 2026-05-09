@@ -1,4 +1,4 @@
-package main.java.musicplaylistshuffler.storage;
+package musicplaylistshuffler.storage;
 
 
 public class StorageService {

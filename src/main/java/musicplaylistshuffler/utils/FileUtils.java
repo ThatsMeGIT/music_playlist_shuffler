@@ -1,4 +1,4 @@
-package main.java.musicplaylistshuffler.utils;
+package musicplaylistshuffler.utils;
 
 import java.io.File;
 

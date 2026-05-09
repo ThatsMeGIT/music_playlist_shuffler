@@ -1,4 +1,4 @@
-package main.java.musicplaylistshuffler.ui;
+package musicplaylistshuffler.ui;
 
 public class ConsoleUi {
 

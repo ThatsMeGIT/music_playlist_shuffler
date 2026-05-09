@@ -1,6 +1,6 @@
-package main.java.musicplaylistshuffler.storage;
+package musicplaylistshuffler.storage;
 
-import main.java.musicplaylistshuffler.utils.FileUtils;
+import musicplaylistshuffler.utils.FileUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;

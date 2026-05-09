@@ -1,7 +1,7 @@
-package main.java.musicplaylistshuffler;
+package musicplaylistshuffler;
 
-import main.java.musicplaylistshuffler.model.Playlist;
-import main.java.musicplaylistshuffler.model.Song;
+import musicplaylistshuffler.model.Playlist;
+import musicplaylistshuffler.model.Song;
 
 import java.util.List;
 
