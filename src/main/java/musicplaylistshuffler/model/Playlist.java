@@ -1,4 +1,4 @@
-package main.java.musicplaylistshuffler.model;
+package musicplaylistshuffler.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,10 @@ public class Playlist {
 
     public List<Song> getSongs() {
         return new ArrayList<Song>(songs);
+    }
+
+    public Song getSpecificSong(int index){
+        return songs.get(index);
     }
 
     public void addSong(Song song) {

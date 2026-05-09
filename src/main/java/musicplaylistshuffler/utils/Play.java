@@ -1,10 +1,8 @@
 package musicplaylistshuffler.utils;
 
-import main.java.musicplaylistshuffler.model.Playlist;
-import main.java.musicplaylistshuffler.model.Playlist;
+import musicplaylistshuffler.model.Playlist;
+import musicplaylistshuffler.model.Song;
 
 public class Play {
-    static void NowPlaying (string[] args){
 
-    }
 }

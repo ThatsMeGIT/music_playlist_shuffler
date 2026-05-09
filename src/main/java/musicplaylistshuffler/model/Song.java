@@ -1,4 +1,4 @@
-package main.java.musicplaylistshuffler.model;
+package musicplaylistshuffler.model;
 
 public class Song {
     private String title;
@@ -42,4 +42,7 @@ public class Song {
         return genre;
     }
 
+    public String toString() {
+        return "Now playing: " + title + " ,from " + artist;
+    }
 }
