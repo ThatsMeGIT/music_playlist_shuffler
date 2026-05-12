@@ -17,7 +17,7 @@ public class FileUtils {
         return file.canRead();
     }
 
-    public boolean isWritable(String path) {
+    public static boolean isWritable(String path) {
         File file = new File(path);
         return file.canWrite();
     }
