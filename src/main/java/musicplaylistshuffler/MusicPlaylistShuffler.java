@@ -1,12 +1,16 @@
 package musicplaylistshuffler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
+import musicplaylistshuffler.storage.StorageService;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MusicPlaylistShuffler {
-    static void main(String[] args) {
+    public static void main(String[] args){
         Playlist playlist = new Playlist(
                 "My Playlist",
                 List.of(
@@ -19,5 +23,13 @@ public class MusicPlaylistShuffler {
         for (Song song : playlist.getSongs()) {
             System.out.println(song.getTitle() + " | " + song.getArtist() + " | " + song.getDuration() + "s | " + song.getGenre());
         }
+
+        Player player = StorageService.startPlayer("C:\\Users\\kev\\IdeaProjects\\music_playlist_shuffler\\src\\main\\resources\\test.json");
+
+        if(player == null){
+            System.out.println("player ist null");
+        }
+
+        System.out.println(player.getPlayingSong().getTitle());
     }
 }
