@@ -2,11 +2,12 @@ package musicplaylistshuffler;
 
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
+import musicplaylistshuffler.ui.MainFrame;
 
 import java.util.List;
 
 public class MusicPlaylistShuffler {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         Playlist playlist = new Playlist(
                 "My Playlist",
                 List.of(
@@ -19,5 +20,8 @@ public class MusicPlaylistShuffler {
         for (Song song : playlist.getSongs()) {
             System.out.println(song.getTitle() + " | " + song.getArtist() + " | " + song.getDuration() + "s | " + song.getGenre());
         }
+
+
+        new MainFrame();
     }
 }
