@@ -7,30 +7,35 @@ public class Player {
     private int playedSeconds;
     private Song playingSong;
     private List<Playlist> playlists;
-
-    enum Status {
-        PLAYING,
-        PAUSED;
-    }
     private Status status;
+    private Mode mode;
 
-    enum mode {
-        NORMAL,
-        SHUFFLE;
+    public Player (int playedSeconds, Song playingSong, List<Playlist> playlists, Status status, Mode mode) {
+        this.playedSeconds = playedSeconds;
+        this.playingSong = playingSong;
+        this.playlists = playlists;
+        this.status = status;
+        this.mode = mode;
     }
 
     public void changeMode() {
+        //gui button implementation for mode change
 
     }
 
     public void toggleStatus() {
-        // hier könnte man noch den Button in der GUI hinzufügen der letzlich den Modus switcht
+        //gui button implementation for status change
+        if (status == Status.PLAYING) {
+            status = Status.PAUSED;
+        } else {
+            status = Status.PLAYING;
+        }
     }
 
     public void startPlaying() throws InterruptedException {
         status = Status.PLAYING;
         while (status == Status.PLAYING) {
-            for (int i = 1; i < playingSong.getDuration(); i++) {
+            for (int i = 0; i <= playingSong.getDuration(); i++) {
                 System.out.println(i);
                 Thread.sleep(100);
             }
