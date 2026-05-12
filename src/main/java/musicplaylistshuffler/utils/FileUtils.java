@@ -2,6 +2,8 @@ package musicplaylistshuffler.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class FileUtils {
     private FileUtils() {
@@ -42,6 +44,10 @@ public class FileUtils {
     public static boolean deleteFile(String path) {
         File file = new File(path);
         return file.delete();
+    }
+
+    public static String readAll(String path) throws IOException {
+        return Files.readString(Path.of(path));
     }
 
 }
