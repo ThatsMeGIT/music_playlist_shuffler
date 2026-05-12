@@ -8,6 +8,10 @@ import java.util.List;
 
 public class MusicPlaylistShuffler {
     public static void main(String[] args) {
+
+        // Here we need to start the program and read all saved playlists in
+        // then launch the gui
+
         Playlist playlist = new Playlist(
                 "My Playlist",
                 List.of(
