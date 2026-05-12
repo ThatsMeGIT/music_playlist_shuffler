@@ -5,6 +5,7 @@ import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.storage.StorageService;
+import musicplaylistshuffler.ui.MainFrame;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,5 +32,6 @@ public class MusicPlaylistShuffler {
         }
 
         System.out.println(player.getPlayingSong().getTitle());
+        new MainFrame();
     }
 }
