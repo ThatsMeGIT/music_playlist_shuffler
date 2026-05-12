@@ -24,7 +24,7 @@ public class MusicPlaylistShuffler {
             System.out.println(song.getTitle() + " | " + song.getArtist() + " | " + song.getDuration() + "s | " + song.getGenre());
         }
 
-        Player player = StorageService.startPlayer("\src\main\resources\test.json");
+        Player player = StorageService.startPlayer("src/main/resources/test.json");
 
         if(player == null){
             System.out.println("player ist null");

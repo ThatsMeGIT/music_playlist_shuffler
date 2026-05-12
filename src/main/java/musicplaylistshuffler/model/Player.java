@@ -1,5 +1,8 @@
 package musicplaylistshuffler.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class Player {
@@ -10,12 +13,15 @@ public class Player {
     private Status status;
     private Mode mode;
 
-    public Player (int playedSeconds, Song playingSong, List<Playlist> playlists, Status status, Mode mode) {
+    @JsonCreator
+    public Player (@JsonProperty("playedSeconds") int playedSeconds,
+                   @JsonProperty("playingSong") Song playingSong,
+                   @JsonProperty("playlists") List<Playlist> playlists) {
         this.playedSeconds = playedSeconds;
         this.playingSong = playingSong;
         this.playlists = playlists;
-        this.status = status;
-        this.mode = mode;
+        //this.status = status;
+        //this.mode = mode;
     }
 
     public void changeMode() {
