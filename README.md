@@ -17,3 +17,6 @@ All supporting logic should be placed in dedicated `*Service.java` classes whene
 
 ### Nice to Have
 - [ ] Logging System
+
+### Done
+- [ ]
