@@ -10,11 +10,10 @@ public class Song {
     private String genre;
 
     @JsonCreator
-    public Song(
-            @JsonProperty("title") String title,
-            @JsonProperty("artist") String artist,
-            @JsonProperty("duration") int duration,
-            @JsonProperty("genre") String genre) {
+    public Song(@JsonProperty("title") String title,
+                @JsonProperty("artist") String artist,
+                @JsonProperty("duration") int duration,
+                @JsonProperty("genre") String genre) {
         if (title == null || title.isBlank()) {
             throw new IllegalArgumentException("title must not be null or blank");
         }
@@ -50,4 +49,7 @@ public class Song {
         return genre;
     }
 
+    public String toString() {
+        return "Now playing: " + title + " ,from " + artist;
+    }
 }

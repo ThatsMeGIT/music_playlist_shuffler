@@ -11,9 +11,8 @@ public class Playlist {
     private List<Song> songs;
 
     @JsonCreator
-    public Playlist(
-            @JsonProperty("name") String name,
-            @JsonProperty("songs") List<Song> songs) {
+    public Playlist(@JsonProperty("name") String name,
+                    @JsonProperty("songs") List<Song> songs) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("name must not be null or blank");
         }
@@ -31,6 +30,10 @@ public class Playlist {
 
     public List<Song> getSongs() {
         return new ArrayList<Song>(songs);
+    }
+
+    public Song getSpecificSong(int index){
+        return songs.get(index);
     }
 
     public void addSong(Song song) {
