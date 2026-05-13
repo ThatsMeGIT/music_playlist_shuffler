@@ -5,6 +5,7 @@ import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.storage.StorageService;
+import musicplaylistshuffler.ui.MainFrame;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,12 +25,13 @@ public class MusicPlaylistShuffler {
             System.out.println(song.getTitle() + " | " + song.getArtist() + " | " + song.getDuration() + "s | " + song.getGenre());
         }
 
-        Player player = StorageService.startPlayer("\src\main\resources\test.json");
+        Player player = StorageService.startPlayer("src/main/resources/test.json");
 
         if(player == null){
             System.out.println("player ist null");
         }
 
         System.out.println(player.getPlayingSong().getTitle());
+        new MainFrame();
     }
 }
