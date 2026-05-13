@@ -6,6 +6,8 @@ import java.net.URL;
 
 public class MainFrame extends JFrame {
 
+    private MainActionHandler actionHandler = new MainActionHandler();
+
     private JTextField searchField;
     private JTable playlistTable;
     private JCheckBox shuffle;
@@ -29,8 +31,8 @@ public class MainFrame extends JFrame {
         //shuffle = new JCheckBox();
         //progressBar = new JProgressBar();
 
-        // North (Search bar)
-        add(createSearchBar(), BorderLayout.NORTH);
+        // North (Search bar & File Input)
+        add(createTopBar(), BorderLayout.NORTH);
 
         // Center (Playlists)
 
@@ -56,12 +58,20 @@ public class MainFrame extends JFrame {
         return controlBar;
     }
 
-    private  JPanel createControls(){
+    private JPanel createControls() {
         JPanel controls = new JPanel();
 
         JButton previous = new JButton("Previous");
         JButton pause = new JButton("Pause/Play");
         JButton next = new JButton("Next");
+
+
+        previous.setActionCommand("previous");
+        previous.addActionListener(actionHandler);
+        pause.setActionCommand("pause/play");
+        pause.addActionListener(actionHandler);
+        next.setActionCommand("next");
+        next.addActionListener(actionHandler);
 
         controls.add(previous, BorderLayout.WEST);
         controls.add(pause, BorderLayout.CENTER);
@@ -85,13 +95,18 @@ public class MainFrame extends JFrame {
         return playBar;
     }
 
-    private JPanel createSearchBar() {
+    private JPanel createTopBar() {
         JPanel searchBar = new JPanel();
+        JButton addPlaylist = new JButton("Add Playlist");
         searchBar.setLayout(new BorderLayout());
+
+        addPlaylist.setActionCommand("new_playlist");
+        addPlaylist.addActionListener(actionHandler);
 
         searchField = new JTextField();
 
         searchBar.add(searchField, BorderLayout.CENTER);
+        searchBar.add(addPlaylist, BorderLayout.EAST);
 
         return searchBar;
     }
