@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class MusicPlaylistShuffler {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Playlist playlist = new Playlist(
                 "My Playlist",
                 List.of(
@@ -27,7 +27,7 @@ public class MusicPlaylistShuffler {
 
         Player player = StorageService.startPlayer("src/main/resources/test.json");
 
-        if(player == null){
+        if (player == null) {
             System.out.println("player ist null");
         }
 

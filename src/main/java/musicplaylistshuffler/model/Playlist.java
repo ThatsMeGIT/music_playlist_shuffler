@@ -32,7 +32,7 @@ public class Playlist {
         return new ArrayList<Song>(songs);
     }
 
-    public Song getSpecificSong(int index){
+    public Song getSpecificSong(int index) {
         return songs.get(index);
     }
 

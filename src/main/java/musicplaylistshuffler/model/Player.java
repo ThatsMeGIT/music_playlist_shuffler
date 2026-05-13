@@ -10,13 +10,13 @@ public class Player {
     private int playedSeconds;
     private Song playingSong;
     private List<Playlist> playlists;
-    private Status status;
-    private Mode mode;
+    private Status status; // from ENUM Status
+    private Mode mode; // from ENUM Mode
 
     @JsonCreator
-    public Player (@JsonProperty("playedSeconds") int playedSeconds,
-                   @JsonProperty("playingSong") Song playingSong,
-                   @JsonProperty("playlists") List<Playlist> playlists) {
+    public Player(@JsonProperty("playedSeconds") int playedSeconds,
+                  @JsonProperty("playingSong") Song playingSong,
+                  @JsonProperty("playlists") List<Playlist> playlists) {
         this.playedSeconds = playedSeconds;
         this.playingSong = playingSong;
         this.playlists = playlists;
@@ -25,12 +25,12 @@ public class Player {
     }
 
     public void changeMode() {
-        //gui button implementation for mode change
+    }
 
+    public void skipSong() {
     }
 
     public void toggleStatus() {
-        //gui button implementation for status change
         if (status == Status.PLAYING) {
             status = Status.PAUSED;
         } else {
@@ -45,6 +45,7 @@ public class Player {
                 System.out.println(i);
                 Thread.sleep(100);
             }
+            // currentlyPlaying.skipSong();
             status = Status.PAUSED;
         }
     }
