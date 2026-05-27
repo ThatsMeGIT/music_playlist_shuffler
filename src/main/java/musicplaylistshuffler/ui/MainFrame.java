@@ -14,7 +14,7 @@ public class MainFrame extends JFrame {
     private JLabel maxDuration;
 
     public MainFrame() {
-        setTitle("Best music Player");
+        setTitle("Best Music Player");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(900, 600);
         setMinimumSize(new Dimension(900, 600));

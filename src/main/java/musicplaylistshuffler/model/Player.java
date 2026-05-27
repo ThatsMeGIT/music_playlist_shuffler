@@ -5,14 +5,15 @@ import java.util.List;
 public class Player {
 
     private int playedSeconds;
-    private Song playingSong;
+    private Song currentSong;
     private List<Playlist> playlists;
     private Status status;
     private Mode mode;
 
-    public Player (int playedSeconds, Song playingSong, List<Playlist> playlists, Status status, Mode mode) {
+
+    public Player (int playedSeconds, Song currentSong, List<Playlist> playlists, Status status, Mode mode) {
         this.playedSeconds = playedSeconds;
-        this.playingSong = playingSong;
+        this.currentSong = currentSong;
         this.playlists = playlists;
         this.status = status;
         this.mode = mode;
@@ -20,7 +21,9 @@ public class Player {
 
     public void changeMode() {
         //gui button implementation for mode change
+        if (mode == Mode.SHUFFLED) {
 
+        }
     }
 
     public void toggleStatus() {
@@ -35,7 +38,7 @@ public class Player {
     public void startPlaying() throws InterruptedException {
         status = Status.PLAYING;
         while (status == Status.PLAYING) {
-            for (int i = 0; i <= playingSong.getDuration(); i++) {
+            for (int i = 0; i <= currentSong.getDuration(); i++) {
                 System.out.println(i);
                 Thread.sleep(100);
             }
@@ -43,23 +46,4 @@ public class Player {
         }
     }
 
-    public int getPlayedSeconds() {
-        return playedSeconds;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public List<Playlist> getPlaylists() {
-        return playlists;
-    }
-
-    public Song getPlayingSong() {
-        return playingSong;
-    }
-
-    public void setPlayingSong(Song playingSong) {
-        this.playingSong = playingSong;
-    }
 }

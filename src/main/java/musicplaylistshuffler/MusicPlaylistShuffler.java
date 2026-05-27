@@ -6,7 +6,6 @@ import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.storage.StorageService;
 
-import java.io.IOException;
 import java.util.List;
 
 public class MusicPlaylistShuffler {
@@ -30,6 +29,6 @@ public class MusicPlaylistShuffler {
             System.out.println("player ist null");
         }
 
-        System.out.println(player.getPlayingSong().getTitle());
+        System.out.println(player.getCurrentSong().getTitle());
     }
 }
