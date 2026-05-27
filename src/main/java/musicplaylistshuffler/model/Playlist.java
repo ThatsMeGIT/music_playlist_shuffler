@@ -1,5 +1,8 @@
 package musicplaylistshuffler.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +10,9 @@ public class Playlist {
     private String name;
     private List<Song> songs;
 
-    public Playlist(String name, List<Song> songs) {
+    @JsonCreator
+    public Playlist(@JsonProperty("name") String name,
+                    @JsonProperty("songs") List<Song> songs) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("name must not be null or blank");
         }
@@ -27,7 +32,7 @@ public class Playlist {
         return new ArrayList<Song>(songs);
     }
 
-    public Song getSpecificSong(int index){
+    public Song getSpecificSong(int index) {
         return songs.get(index);
     }
 

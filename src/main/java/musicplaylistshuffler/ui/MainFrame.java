@@ -56,7 +56,7 @@ public class MainFrame extends JFrame {
         return controlBar;
     }
 
-    private  JPanel createControls(){
+    private JPanel createControls() {
         JPanel controls = new JPanel();
 
         JButton previous = new JButton("Previous");

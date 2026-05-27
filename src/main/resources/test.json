@@ -1,0 +1,45 @@
+{
+  "playedSeconds": 125,
+  "playingSong": {
+    "title": "Blinding Lights",
+    "artist": "The Weeknd",
+    "duration": 200,
+    "genre": "Pop"
+  },
+  "playlists": [
+    {
+      "name": "Favorites",
+      "songs": [
+        {
+          "title": "Blinding Lights",
+          "artist": "The Weeknd",
+          "duration": 200,
+          "genre": "Pop"
+        },
+        {
+          "title": "Bohemian Rhapsody",
+          "artist": "Queen",
+          "duration": 354,
+          "genre": "Rock"
+        }
+      ]
+    },
+    {
+      "name": "Chill Vibes",
+      "songs": [
+        {
+          "title": "Sunflower",
+          "artist": "Post Malone",
+          "duration": 158,
+          "genre": "Hip-Hop"
+        },
+        {
+          "title": "Ocean Eyes",
+          "artist": "Billie Eilish",
+          "duration": 220,
+          "genre": "Indie"
+        }
+      ]
+    }
+  ]
+}

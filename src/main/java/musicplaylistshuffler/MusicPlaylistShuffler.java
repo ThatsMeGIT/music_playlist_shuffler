@@ -6,10 +6,11 @@ import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.storage.StorageService;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MusicPlaylistShuffler {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Playlist playlist = new Playlist(
                 "My Playlist",
                 List.of(
@@ -23,7 +24,7 @@ public class MusicPlaylistShuffler {
             System.out.println(song.getTitle() + " | " + song.getArtist() + " | " + song.getDuration() + "s | " + song.getGenre());
         }
 
-        Player player = StorageService.startPlayer("\src\main\resources\test.json");
+        Player player = StorageService.startPlayer("src/main/resources/test.json");
 
         if(player == null){
             System.out.println("player ist null");
