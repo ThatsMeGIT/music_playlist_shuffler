@@ -5,25 +5,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-import musicplaylistshuffler.model.Song;
-import musicplaylistshuffler.model.Playlist;
-import musicplaylistshuffler.model.Status;
-import musicplaylistshuffler.model.Mode;
-
 public class Player {
 
     private int playedSeconds;
-    private Song playingSong;
+    private Song currentSong;
     private List<Playlist> playlists;
     private Status status; // from ENUM Status
     private Mode mode; // from ENUM Mode
 
     @JsonCreator
     public Player(@JsonProperty("playedSeconds") int playedSeconds,
-                  @JsonProperty("playingSong") Song playingSong,
+                  @JsonProperty("currentSong") Song currentSong,
                   @JsonProperty("playlists") List<Playlist> playlists) {
+        if (playedSeconds <= 0) {
+            throw new IllegalArgumentException("playedSeconds cannot be negative");
+        }
+        if (currentSong == null) {
+            throw new IllegalArgumentException("currentSong cannot be null");
+        }
+        if (playlists == null) {
+            throw new IllegalArgumentException("playlists cannot be null");
+        }
+
         this.playedSeconds = playedSeconds;
-        this.playingSong = playingSong;
+        this.currentSong = currentSong;
         this.playlists = playlists;
         // this.status = status;
         // this.mode = mode;
@@ -31,10 +36,6 @@ public class Player {
 
     public void changeMode() {
         //gui button implementation for mode change
-    }
-
-    public void skipSong() {
-
     }
 
     public void toggleStatus() {
@@ -49,9 +50,9 @@ public class Player {
     public void startPlaying() throws InterruptedException {
         status = Status.PLAYING;
         while (status == Status.PLAYING) {
-            for (int i = 0; i <= playingSong.getDuration(); i++) {
+            for (int i = 0; i <= currentSong.getDuration(); i++) {
                 System.out.println(i);
-                Thread.sleep(100);
+                Thread.sleep(1000);
             }
             // currentlyPlaying.skipSong();
             status = Status.PAUSED;
@@ -71,10 +72,7 @@ public class Player {
     }
 
     public Song getCurrentSong() {
-        return playingSong;
+        return currentSong;
     }
 
-    public void setCurrentSong(Song playingSong) {
-        this.playingSong = playingSong;
-    }
 }
