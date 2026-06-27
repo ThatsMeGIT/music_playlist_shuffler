@@ -21,7 +21,6 @@ The `<ClassName>` class is responsible for:
 
 Provide a short explanation of what the class currently does.
 
-
 ## Methods
 
 ### `<ConstructorName>()`

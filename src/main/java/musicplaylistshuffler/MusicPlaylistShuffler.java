@@ -1,6 +1,5 @@
 package musicplaylistshuffler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;

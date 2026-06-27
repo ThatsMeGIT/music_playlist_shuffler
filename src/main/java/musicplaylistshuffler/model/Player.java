@@ -5,6 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+import musicplaylistshuffler.model.Song;
+import musicplaylistshuffler.model.Playlist;
+import musicplaylistshuffler.model.Status;
+import musicplaylistshuffler.model.Mode;
+
 public class Player {
 
     private int playedSeconds;
@@ -65,11 +70,11 @@ public class Player {
         return playlists;
     }
 
-    public Song getPlayingSong() {
+    public Song getCurrentSong() {
         return playingSong;
     }
 
-    public void setPlayingSong(Song playingSong) {
+    public void setCurrentSong(Song playingSong) {
         this.playingSong = playingSong;
     }
 }
