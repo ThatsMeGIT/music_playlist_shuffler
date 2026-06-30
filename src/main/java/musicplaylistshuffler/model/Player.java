@@ -8,64 +8,119 @@ import java.util.List;
 public class Player {
 
     private int playedSeconds;
-    private Song playingSong;
+    private Song currentSong;
     private List<Playlist> playlists;
+    private int currentPlaylistIndex;
+    private int currentSongIndex;
     private Status status;
     private Mode mode;
 
     @JsonCreator
-    public Player (@JsonProperty("playedSeconds") int playedSeconds,
-                   @JsonProperty("playingSong") Song playingSong,
-                   @JsonProperty("playlists") List<Playlist> playlists) {
+    public Player(
+            @JsonProperty("playedSeconds") int playedSeconds,
+            @JsonProperty("currentSong") Song currentSong,
+            @JsonProperty("playlists") List<Playlist> playlists,
+            @JsonProperty("currentPlaylistIndex") int currentPlaylistIndex,
+            @JsonProperty("currentSongIndex") int currentSongIndex,
+            @JsonProperty("status") Status status,
+            @JsonProperty("mode") Mode mode
+    ) {
         this.playedSeconds = playedSeconds;
-        this.playingSong = playingSong;
+        this.currentSong = currentSong;
         this.playlists = playlists;
-        //this.status = status;
-        //this.mode = mode;
-    }
-
-    public void changeMode() {
-        //gui button implementation for mode change
-
-    }
-
-    public void toggleStatus() {
-        //gui button implementation for status change
-        if (status == Status.PLAYING) {
-            status = Status.PAUSED;
-        } else {
-            status = Status.PLAYING;
-        }
-    }
-
-    public void startPlaying() throws InterruptedException {
-        status = Status.PLAYING;
-        while (status == Status.PLAYING) {
-            for (int i = 0; i <= playingSong.getDuration(); i++) {
-                System.out.println(i);
-                Thread.sleep(100);
-            }
-            status = Status.PAUSED;
-        }
+        this.currentPlaylistIndex = currentPlaylistIndex;
+        this.currentSongIndex = currentSongIndex;
+        this.status = status != null ? status : Status.PAUSED;
+        this.mode = mode != null ? mode : Mode.NORMAL;
     }
 
     public int getPlayedSeconds() {
         return playedSeconds;
     }
 
-    public Status getStatus() {
-        return status;
+    public Song getCurrentSong() {
+        return currentSong;
     }
 
     public List<Playlist> getPlaylists() {
         return playlists;
     }
 
-    public Song getPlayingSong() {
-        return playingSong;
+    public int getCurrentPlaylistIndex() {
+        return currentPlaylistIndex;
     }
 
-    public void setPlayingSong(Song playingSong) {
-        this.playingSong = playingSong;
+    public int getCurrentSongIndex() {
+        return currentSongIndex;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public void setCurrentSong(Song currentSong) {
+        this.currentSong = currentSong;
+    }
+
+    public void play() {
+        status = Status.PLAYING;
+    }
+
+    public void pause() {
+        status = Status.PAUSED;
+    }
+
+    public void skip() {
+        Playlist currentPlaylist = getCurrentPlaylist();
+
+        if (currentPlaylist == null || currentPlaylist.getSongs().isEmpty()) {
+            currentSong = null;
+            playedSeconds = 0;
+            return;
+        }
+
+        currentSongIndex++;
+
+        if (currentSongIndex >= currentPlaylist.getSongs().size()) {
+            currentSongIndex = 0;
+        }
+
+        currentSong = currentPlaylist.getSpecificSong(currentSongIndex);
+        playedSeconds = 0;
+    }
+
+    public void previous() {
+        Playlist currentPlaylist = getCurrentPlaylist();
+
+        if (currentPlaylist == null || currentPlaylist.getSongs().isEmpty()) {
+            currentSong = null;
+            playedSeconds = 0;
+            return;
+        }
+
+        currentSongIndex--;
+
+        if (currentSongIndex <= 0) {
+            currentSongIndex = currentPlaylist.getSongs().size();
+        }
+
+        currentSong = currentPlaylist.getSpecificSong(currentSongIndex);
+        playedSeconds = 0;
+    }
+
+    private Playlist getCurrentPlaylist() {
+        if (playlists == null || playlists.isEmpty()) {
+            return null;
+        }
+
+        if (currentPlaylistIndex < 0 || currentPlaylistIndex >= playlists.size()) {
+            currentPlaylistIndex = 0;
+        }
+
+        return playlists.get(currentPlaylistIndex);
     }
 }
