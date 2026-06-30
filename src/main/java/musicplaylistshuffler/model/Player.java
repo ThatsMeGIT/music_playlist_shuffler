@@ -104,8 +104,8 @@ public class Player {
 
         currentSongIndex--;
 
-        if (currentSongIndex <= 0) {
-            currentSongIndex = currentPlaylist.getSongs().size();
+        if (currentSongIndex < 0) {
+            currentSongIndex = currentPlaylist.getSongs().size()-1;
         }
 
         currentSong = currentPlaylist.getSpecificSong(currentSongIndex);
