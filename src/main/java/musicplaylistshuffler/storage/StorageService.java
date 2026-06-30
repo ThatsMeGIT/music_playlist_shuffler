@@ -45,4 +45,7 @@ public class StorageService {
 
     }
 
+    public static void removePlaylist(Player player, Playlist playlist){
+    }
+
 }
