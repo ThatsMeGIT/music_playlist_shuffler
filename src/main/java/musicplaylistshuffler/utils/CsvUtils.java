@@ -11,27 +11,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CsvUtils {
+    private static String DELIMITER = ";";
+    private static int EXPECTED_COLUMNS = 4;
 
     public static List<Song> loadSongsFromCsv(String path) {
         List<Song> songs = new ArrayList<>();
         try (Reader reader = new FileReader(path)) {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT
                     .builder()
-                    .setDelimiter(';')
+                    .setDelimiter(DELIMITER)
                     .setHeader()
                     .setSkipHeaderRecord(true)
                     .build()
                     .parse(reader);
             for (CSVRecord record : records) {
-                Song song = new Song(record.get(0), record.get(1), Integer.parseInt(record.get(2)), record.get(3));
-                songs.add(song);
+                if (record.size() > EXPECTED_COLUMNS) {
+                    System.out.println(record.getRecordNumber() + "Line is invalid");
+                    return songs;
+                } else {
+                    songs.add(parseLine(record));
+                }
             }
-
             return songs;
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            return null;
+        } catch (Exception e){
+            System.out.println("Error with file " + e);
+            return songs;
         }
+
     }
 
+
+    private static Song parseLine(CSVRecord record) {
+        String title = record.get(0);
+        String artist = record.get(1);
+        int duration = Integer.parseInt(record.get(2));
+        String genre = record.get(3);
+
+        return new Song(title, artist, duration, genre);
+    }
 }
+
+
