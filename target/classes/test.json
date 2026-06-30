@@ -1,11 +1,15 @@
 {
   "playedSeconds": 125,
-  "playingSong": {
+  "currentSong": {
     "title": "Blinding Lights",
     "artist": "The Weeknd",
     "duration": 200,
     "genre": "Pop"
   },
+  "currentPlaylistIndex": 0,
+  "currentSongIndex": 0,
+  "status": "PAUSED",
+  "mode": "NORMAL",
   "playlists": [
     {
       "name": "Favorites",
