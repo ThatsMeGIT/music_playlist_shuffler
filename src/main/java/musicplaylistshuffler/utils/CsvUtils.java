@@ -5,7 +5,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +13,9 @@ public class CsvUtils {
     private static String DELIMITER = ";";
     private static int EXPECTED_COLUMNS = 4;
 
-    public static List<Song> loadSongsFromCsv(String path) {
+    public static List<Song> loadSongsFromCsv(String path) throws Exception{
         List<Song> songs = new ArrayList<>();
-        try (Reader reader = new FileReader(path)) {
+        Reader reader = new FileReader(path);
             Iterable<CSVRecord> records = CSVFormat.DEFAULT
                     .builder()
                     .setDelimiter(DELIMITER)
@@ -25,7 +24,7 @@ public class CsvUtils {
                     .build()
                     .parse(reader);
             for (CSVRecord record : records) {
-                if (record.size() > EXPECTED_COLUMNS) {
+                if (record.size() != EXPECTED_COLUMNS) {
                     System.out.println(record.getRecordNumber() + "Line is invalid");
                     return songs;
                 } else {
@@ -33,10 +32,6 @@ public class CsvUtils {
                 }
             }
             return songs;
-        } catch (Exception e){
-            System.out.println("Error with file " + e);
-            return songs;
-        }
 
     }
 
