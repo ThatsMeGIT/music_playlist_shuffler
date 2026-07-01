@@ -46,6 +46,13 @@ public class Player {
         return playlists;
     }
 
+    public boolean addPlaylist(Playlist playlist){
+        if (playlists == null ){
+            return false;
+        }
+        return playlists.add(playlist);
+    }
+
     public int getCurrentPlaylistIndex() {
         return currentPlaylistIndex;
     }
