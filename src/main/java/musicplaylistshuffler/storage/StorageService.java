@@ -1,51 +1,16 @@
 package musicplaylistshuffler.storage;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
-import musicplaylistshuffler.utils.FileUtils;
-import musicplaylistshuffler.utils.JsonUtils;
+import musicplaylistshuffler.utils.CsvUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.spec.ECField;
+import java.util.List;
 
-public class StorageService {
+public class StorageService{
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    public static void addNewPlaylistFromCsv(Player player, String path, String playlistName) {
 
-    private StorageService() {
-    }
-
-
-    public static Player startPlayer(String path) {
-        if (FileUtils.exists(path) && FileUtils.isReadable(path) && FileUtils.checkExtension(path, "json")) {
-            try {
-                String json = FileUtils.readAll(path);
-                JsonNode node = mapper.readTree(json);
-                return JsonUtils.fromJson(node, Player.class);
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    public static void savePlayerChanges() {
-
-    }
-
-    public static void createNewPlaylist() {
-
-    }
-
-    public static void removePlaylist(Player player, Playlist playlist){
     }
 
 }
