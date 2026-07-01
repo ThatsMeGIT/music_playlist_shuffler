@@ -10,17 +10,18 @@ class PlaylistTest {
 
     @Test
     void shouldCreatePlaylistWithValidValues() {
-        Song song = new Song("Title", "Artist", 120, "Pop");
-        Playlist playlist = new Playlist("Name", List.of(song));
+        Song song1 = new Song("Title1", "Artist1", 100, "Pop");
 
-        assertEquals("Name", playlist.getName());
+        Playlist playlist = new Playlist("Playlist1", List.of(song1));
+
+        assertEquals("Playlist1", playlist.getName());
         assertEquals(1, playlist.getSongs().size());
-        assertEquals("Title", playlist.getSongs().get(0).getTitle());
+        assertEquals("Title1", playlist.getSongs().get(0).getTitle());
     }
 
     @Test
     void shouldThrowWhenNameIsBlank() {
-        Song song = new Song("Title", "Artist", 120, "Pop");
+        Song song = new Song("Title1", "Artist1", 100, "Pop");
 
         assertThrows(IllegalArgumentException.class, () ->
                 new Playlist(" ", List.of(song)));
@@ -29,6 +30,31 @@ class PlaylistTest {
     @Test
     void shouldThrowWhenSongsIsNull() {
         assertThrows(IllegalArgumentException.class, () ->
-                new Playlist("Name", null));
+                new Playlist("Playlist1", null));
     }
+
+    @Test
+    void shouldCalculateAverageSongLength() {
+        Song song1 = new Song("Title1", "Artist1", 100, "Pop");
+        Song song2 = new Song("Title2", "Artist2", 150, "Rock");
+        Song song3 = new Song("Title3", "Artist3", 200, "Jazz");
+        Song song4 = new Song("Title4", "Artist4", 250, "Jazz");
+
+        Playlist playlist = new Playlist("Playlist1", List.of(song1, song2, song3, song4));
+
+        assertEquals(175, playlist.averageSongLength());
+    }
+
+    @Test
+    void shouldCalculatePlaylistLength() {
+        Song song1 = new Song("Title1", "Artist1", 100, "Pop");
+        Song song2 = new Song("Title2", "Artist2", 150, "Rock");
+        Song song3 = new Song("Title3", "Artist3", 200, "Jazz");
+        Song song4 = new Song("Title4", "Artist4", 250, "Jazz");
+
+        Playlist playlist = new Playlist("Playlist1", List.of(song1, song2, song3, song4));
+
+        assertEquals(700, playlist.playlistLength());
+    }
+
 }

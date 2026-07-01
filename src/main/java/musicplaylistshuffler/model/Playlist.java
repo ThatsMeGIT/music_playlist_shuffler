@@ -24,6 +24,30 @@ public class Playlist {
         this.songs = new ArrayList<>(songs);
     }
 
+    public double averageSongLength() {
+        double averageLength = 0;
+        if (songs != null) {
+            for (Song song : songs) {
+                averageLength += song.getDuration();
+            }
+            return averageLength / songs.size();
+        } else return 0;
+    }
+
+    public int playlistLength() {
+        int playlistlength = 0;
+        if (songs != null) {
+            for (Song song : songs) {
+                playlistlength += song.getDuration();
+            }
+            return playlistlength;
+        } else return 0;
+    }
+
+    // most genre implementation through maps
+
+    // SHUFFLE FINALLY (hopefully i guess)
+
     public String getName() {
         return name;
     }
