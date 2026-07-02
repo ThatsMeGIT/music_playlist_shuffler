@@ -8,17 +8,18 @@ import java.net.URL;
 
 public class MainFrame extends JFrame {
 
-    private MainActionHandler actionHandler = new MainActionHandler();
+    private final Player player;
+    private final MainActionHandler actionHandler;
 
-    private JTextField searchField;
-    private JTable playlistTable;
-    private JCheckBox shuffle;
-    private JProgressBar progressBar;
-    private JLabel playedDuration;
-    private JLabel maxDuration;
+    private JLabel songTitleLabel;
+    private JLabel artistLabel;
+    private JLabel statusLabel;
 
     public MainFrame(Player player) {
-        this.actionHandler = new MainActionHandler(player);
+        this.player = player;
+        this.actionHandler = new MainActionHandler(player, this);
+
+
         setTitle("Best music Player");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(900, 600);
@@ -28,90 +29,30 @@ public class MainFrame extends JFrame {
         URL iconUrl = MainFrame.class.getResource("/MusicPlaylistShufflerLogo.png");
         setIconImage(new ImageIcon(iconUrl).getImage());
 
-        // implement worker fields
-        //searchField = new JTextField();
-        //playlistTable = new JTable();
-        //shuffle = new JCheckBox();
-        //progressBar = new JProgressBar();
 
-        // North (Search bar & File Input)
-        add(createTopBar(), BorderLayout.NORTH);
+        add(createSongInfoPanel(), BorderLayout.SOUTH);
+        refreshPlayerView();
 
-        // Center (Playlists)
-
-        // South (Control Panel)
-        add(createControlBar(), BorderLayout.SOUTH);
-
-
-        pack();
-        setVisible(true);
     }
 
+    private  JPanel createSongInfoPanel(){
+        JPanel panel = new JPanel(new GridLayout(1,3));
 
-    private JPanel createControlBar() {
-        JPanel controlBar = new JPanel();
-        controlBar.setLayout(new BorderLayout());
+        songTitleLabel = new JLabel();
+        artistLabel = new JLabel();
+        statusLabel = new JLabel();
 
-        JPanel controls = createControls();
-        JPanel playBar = createPlayBar();
+        panel.add(songTitleLabel);
+        panel.add(artistLabel);
+        panel.add(statusLabel);
 
-        controlBar.add(controls, BorderLayout.CENTER);
-        controlBar.add(playBar, BorderLayout.SOUTH);
-
-        return controlBar;
+        return panel;
     }
 
-    private JPanel createControls() {
-        JPanel controls = new JPanel();
-
-        JButton previous = new JButton("Previous");
-        JButton pause = new JButton("Pause/Play");
-        JButton next = new JButton("Next");
-
-
-        previous.setActionCommand("previous");
-        previous.addActionListener(actionHandler);
-        pause.setActionCommand("pause/play");
-        pause.addActionListener(actionHandler);
-        next.setActionCommand("next");
-        next.addActionListener(actionHandler);
-
-        controls.add(previous, BorderLayout.WEST);
-        controls.add(pause, BorderLayout.CENTER);
-        controls.add(next, BorderLayout.EAST);
-
-        return controls;
-    }
-
-    private JPanel createPlayBar() {
-        JPanel playBar = new JPanel();
-        playBar.setLayout(new BorderLayout());
-
-        playedDuration = new JLabel("0:00");
-        progressBar = new JProgressBar();
-        maxDuration = new JLabel("3:12");
-
-        playBar.add(playedDuration, BorderLayout.WEST);
-        playBar.add(progressBar, BorderLayout.CENTER);
-        playBar.add(maxDuration, BorderLayout.EAST);
-
-        return playBar;
-    }
-
-    private JPanel createTopBar() {
-        JPanel searchBar = new JPanel();
-        JButton addPlaylist = new JButton("Add Playlist");
-        searchBar.setLayout(new BorderLayout());
-
-        addPlaylist.setActionCommand("new_playlist");
-        addPlaylist.addActionListener(actionHandler);
-
-        searchField = new JTextField();
-
-        searchBar.add(searchField, BorderLayout.CENTER);
-        searchBar.add(addPlaylist, BorderLayout.EAST);
-
-        return searchBar;
+    public void refreshPlayerView(){
+        songTitleLabel.setText(player.getCurrentSong().getTitle());
+        songTitleLabel.setText(player.getCurrentSong().getArtist());
+        songTitleLabel.setText(player.getStatus().toString());
     }
 
 }
