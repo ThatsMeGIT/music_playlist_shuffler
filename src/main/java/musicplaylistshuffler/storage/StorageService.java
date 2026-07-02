@@ -4,7 +4,9 @@ import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.utils.CsvUtils;
+import musicplaylistshuffler.utils.JsonUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 public class StorageService {
@@ -30,28 +32,29 @@ public class StorageService {
         }
     }
 
-
-    public static boolean loadPlayerFromJson(String path) {
-        if (path == null || path.isEmpty()) {
-            System.out.println("Path is not valid");
-            return false;
+    public static Player loadPlayerFromJson(String path) {
+        if (path == null || path.isBlank()) {
+            return null;
         }
 
-        return true;
-
+        try {
+            return JsonUtils.loadPlayerFromJson(path);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static boolean savePlayerToJson(Player player, String path) {
-        if (path == null || path.isEmpty()) {
-            System.out.println("Path is not valid");
-            return false;
-        }
-        if (player == null){
-            System.out.println("Player is not valid");
+        if (path == null || path.isBlank()) {
             return false;
         }
 
-        return true;
+        try {
+            JsonUtils.savePlayerToJson(player, path);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }
