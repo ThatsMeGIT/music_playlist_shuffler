@@ -11,12 +11,9 @@ public class MusicPlaylistShuffler {
         Player player = StorageService.loadPlayerFromJson(path);
 
         if(player != null){
-            new MainFrame(player);
+            new MainFrame(player, path);
         } else {
             System.out.println("Error while loading Player");
         }
-
-        System.out.println("test");
-
     }
 }

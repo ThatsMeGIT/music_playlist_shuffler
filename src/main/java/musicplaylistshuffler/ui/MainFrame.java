@@ -1,74 +1,60 @@
 package musicplaylistshuffler.ui;
 
 import musicplaylistshuffler.model.Player;
+import musicplaylistshuffler.storage.StorageService;
 
 import javax.swing.*;
+import javax.xml.xpath.XPath;
 import java.awt.*;
 import java.net.URL;
 
 public class MainFrame extends JFrame {
 
     private final Player player;
+    private final String path;
+
     private final MainActionHandler actionHandler;
     private final PlaybackControlPanel playbackControlPanel;
+    private final MenuBar menuBar;
 
-    public MainFrame(Player player) {
+    public MainFrame(Player player, String path) {
         this.player = player;
+        this.path = path;
         this.actionHandler = new MainActionHandler(player, this);
         this.playbackControlPanel = new PlaybackControlPanel(player, actionHandler);
-
+        this.menuBar = new MenuBar(actionHandler);
 
         setTitle("Best music Player");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                StorageService.savePlayerToJson(player, path);
+                dispose();
+                System.exit(0);
+            }
+        });
+
         setSize(900, 600);
         setMinimumSize(new Dimension(900, 600));
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        System.out.println(System.getProperty("user.dir"));
         URL iconUrl = MainFrame.class.getResource("/icons/MusicPlaylistShufflerLogo.png");
         if (iconUrl != null) {
             setIconImage(new ImageIcon(iconUrl).getImage());
         }
 
         add(playbackControlPanel, BorderLayout.SOUTH);
-        setJMenuBar(createMenuBar());
+        setJMenuBar(menuBar);
 
         setVisible(true);
         refreshPlayerView();
     }
 
-    private JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-
-        JMenu fileMenu = new JMenu("File");
-
-        JMenuItem addPlaylistItem = new JMenuItem("Add Playlist");
-        addPlaylistItem.setActionCommand("addPlaylist");
-        addPlaylistItem.addActionListener(actionHandler);
-
-        JMenuItem shuffleItem = new JMenuItem("Shuffle");
-        shuffleItem.setActionCommand("shuffle");
-        shuffleItem.addActionListener(actionHandler);
-
-        JMenuItem exitItem = new JMenuItem("Exit");
-        exitItem.setActionCommand("exit");
-        exitItem.addActionListener(actionHandler);
-
-        fileMenu.add(addPlaylistItem);
-        fileMenu.addSeparator();
-        fileMenu.add(shuffleItem);
-        fileMenu.addSeparator();
-        fileMenu.add(exitItem);
-
-        menuBar.add(fileMenu);
-
-        return menuBar;
-    }
-
     public void refreshPlayerView() {
         playbackControlPanel.refreshPlayerView();
     }
-
 
 }
