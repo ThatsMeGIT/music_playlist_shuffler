@@ -106,6 +106,10 @@ public class Playlist {
         return new ArrayList<Song>(songs);
     }
 
+    public Mode getMode() {
+        return mode;
+    }
+
     public Song getSpecificSong(int index) {
         return getCurrentList().get(index);
     }

@@ -69,5 +69,66 @@ class PlaylistTest {
         assertEquals("Jazz", playlist.topGenre());
     }
 
+    @Test
+    void shouldReturnOriginalListWhenShuffleOff() {
+        Song song1 = new Song("Title1", "Artist1", 100, "Pop");
+        Song song2 = new Song("Title2", "Artist2", 150, "Rock");
 
+        Playlist playlist = new Playlist("Playlist1", List.of(song1, song2));
+
+        playlist.shuffleOFF();
+
+        List<Song> result = playlist.getCurrentList();
+
+        assertEquals(2, result.size());
+        assertEquals("Title1", result.get(0).getTitle());
+        assertEquals("Title2", result.get(1).getTitle());
+    }
+
+    @Test
+    void shouldReturnOriginalOrderAfterShuffleOff() {
+        Song song1 = new Song("Title1", "Artist1", 100, "Pop");
+        Song song2 = new Song("Title2", "Artist2", 150, "Rock");
+
+        Playlist playlist = new Playlist("Playlist1", List.of(song1, song2));
+
+        playlist.shuffleON();
+        playlist.shuffleOFF();
+
+        List<Song> result = playlist.getCurrentList();
+
+        assertEquals("Title1", result.get(0).getTitle());
+        assertEquals("Title2", result.get(1).getTitle());
+    }
+
+    @Test
+    void shouldShuffleSongsButKeepAllElements() {
+        Song song1 = new Song("Title1", "Artist1", 100, "Pop");
+        Song song2 = new Song("Title2", "Artist2", 150, "Rock");
+        Song song3 = new Song("Title3", "Artist3", 200, "Jazz");
+
+        Playlist playlist = new Playlist("Playlist1", List.of(song1, song2, song3));
+
+        playlist.shuffleON();
+
+        List<Song> result = playlist.getCurrentList();
+
+        assertEquals(3, result.size());
+
+        assertTrue(result.contains(song1));
+        assertTrue(result.contains(song2));
+        assertTrue(result.contains(song3));
+    }
+
+    @Test
+    void shouldReturnShuffledListWhenModeIsShuffle() {
+        Song song1 = new Song("Title1", "Artist", 100, "Pop");
+        Song song2 = new Song("Title2", "Artist", 120, "Rock");
+
+        Playlist playlist = new Playlist("Playlist1", List.of(song1, song2));
+
+        playlist.shuffleON();
+
+        assertEquals(Mode.SHUFFLED, playlist.getMode());
+    }
 }
