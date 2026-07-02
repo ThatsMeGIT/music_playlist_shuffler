@@ -13,6 +13,8 @@ public class CsvUtils {
     private static String DELIMITER = ";";
     private static int EXPECTED_COLUMNS = 4;
 
+    private CsvUtils(){}
+
     public static List<Song> loadSongsFromCsv(String path) throws Exception{
         List<Song> songs = new ArrayList<>();
         Reader reader = new FileReader(path);
