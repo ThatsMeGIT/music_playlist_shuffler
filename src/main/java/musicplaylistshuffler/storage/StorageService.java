@@ -9,7 +9,7 @@ import musicplaylistshuffler.utils.JsonUtils;
 import java.io.IOException;
 import java.util.List;
 
-public class StorageService {
+public class StorageService{
 
     public static boolean addNewPlaylistFromCsv(Player player, String path, String playlistName) {
         if (player == null || path == null || path.isBlank() || playlistName == null || playlistName.isBlank()) {

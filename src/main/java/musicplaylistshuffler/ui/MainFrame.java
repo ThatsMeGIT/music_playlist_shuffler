@@ -1,5 +1,7 @@
 package musicplaylistshuffler.ui;
 
+import musicplaylistshuffler.model.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -15,7 +17,8 @@ public class MainFrame extends JFrame {
     private JLabel playedDuration;
     private JLabel maxDuration;
 
-    public MainFrame() {
+    public MainFrame(Player player) {
+        this.actionHandler = new MainActionHandler(player);
         setTitle("Best music Player");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(900, 600);
