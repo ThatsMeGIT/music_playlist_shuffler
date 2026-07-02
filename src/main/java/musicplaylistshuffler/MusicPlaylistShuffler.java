@@ -14,7 +14,7 @@ public class MusicPlaylistShuffler {
     public static void main(String[] args){
         Player player = StorageService.startPlayer("src/main/resources/test.json");
         if(player != null){
-            new MainFrame();
+            new MainFrame(player);
         } else {
             System.out.println("Error: Reading json File");
         }
