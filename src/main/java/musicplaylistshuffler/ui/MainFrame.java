@@ -10,14 +10,12 @@ public class MainFrame extends JFrame {
 
     private final Player player;
     private final MainActionHandler actionHandler;
-
-    private JLabel songTitleLabel;
-    private JLabel artistLabel;
-    private JLabel statusLabel;
+    private final PlaybackControlPanel playbackControlPanel;
 
     public MainFrame(Player player) {
         this.player = player;
         this.actionHandler = new MainActionHandler(player, this);
+        this.playbackControlPanel = new PlaybackControlPanel(player, actionHandler);
 
 
         setTitle("Best music Player");
@@ -26,33 +24,51 @@ public class MainFrame extends JFrame {
         setMinimumSize(new Dimension(900, 600));
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-        URL iconUrl = MainFrame.class.getResource("/MusicPlaylistShufflerLogo.png");
-        setIconImage(new ImageIcon(iconUrl).getImage());
 
+        System.out.println(System.getProperty("user.dir"));
+        URL iconUrl = MainFrame.class.getResource("/icons/MusicPlaylistShufflerLogo.png");
+        if (iconUrl != null) {
+            setIconImage(new ImageIcon(iconUrl).getImage());
+        }
 
-        add(createSongInfoPanel(), BorderLayout.SOUTH);
+        add(playbackControlPanel, BorderLayout.SOUTH);
+        setJMenuBar(createMenuBar());
+
+        setVisible(true);
         refreshPlayerView();
-
     }
 
-    private  JPanel createSongInfoPanel(){
-        JPanel panel = new JPanel(new GridLayout(1,3));
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
 
-        songTitleLabel = new JLabel();
-        artistLabel = new JLabel();
-        statusLabel = new JLabel();
+        JMenu fileMenu = new JMenu("File");
 
-        panel.add(songTitleLabel);
-        panel.add(artistLabel);
-        panel.add(statusLabel);
+        JMenuItem addPlaylistItem = new JMenuItem("Add Playlist");
+        addPlaylistItem.setActionCommand("addPlaylist");
+        addPlaylistItem.addActionListener(actionHandler);
 
-        return panel;
+        JMenuItem shuffleItem = new JMenuItem("Shuffle");
+        shuffleItem.setActionCommand("shuffle");
+        shuffleItem.addActionListener(actionHandler);
+
+        JMenuItem exitItem = new JMenuItem("Exit");
+        exitItem.setActionCommand("exit");
+        exitItem.addActionListener(actionHandler);
+
+        fileMenu.add(addPlaylistItem);
+        fileMenu.addSeparator();
+        fileMenu.add(shuffleItem);
+        fileMenu.addSeparator();
+        fileMenu.add(exitItem);
+
+        menuBar.add(fileMenu);
+
+        return menuBar;
     }
 
-    public void refreshPlayerView(){
-        songTitleLabel.setText(player.getCurrentSong().getTitle());
-        songTitleLabel.setText(player.getCurrentSong().getArtist());
-        songTitleLabel.setText(player.getStatus().toString());
+    public void refreshPlayerView() {
+        playbackControlPanel.refreshPlayerView();
     }
+
 
 }
