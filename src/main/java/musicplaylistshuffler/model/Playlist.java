@@ -3,17 +3,17 @@ package musicplaylistshuffler.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import musicplaylistshuffler.model.Mode;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Playlist {
     private String name;
     private List<Song> songs;
-    private Mode mode;
+    private List<Song> shuffledSongs;
+    private Mode mode; // from ENUM Mode
 
     @JsonCreator
     public Playlist(@JsonProperty("name") String name,
@@ -73,47 +73,29 @@ public class Playlist {
         return topGenre;
     }
 
-    // SHUFFLE FINALLY (hopefully i guess)public void sortMitarbeiter() {
-    //
-    //        Mitarbeiter tmp;
-    //
-    //        for (int i = 0; i < pv.getSize() - 1; i++) {
-    //            for (int j = 0; j < pv.getSize() - 1 - i; j++) {
-    //
-    //                Mitarbeiter m1 = pv.get(j);
-    //                Mitarbeiter m2 = pv.get(j + 1);
-    //
-    //                if (m1.istKleiner(m2)) {
-    //
-    //                } else {
-    //                    tmp = m1;
-    //                    pv.set(j + 1, m1);
-    //                    pv.set(j, m2);
-    //                }
-    //
-    //            }
-    //        }
-    //    }
+    public void shuffleON() {
+        mode = Mode.SHUFFLED;
 
-    public List<Song> Shuffle() {
+        shuffledSongs = new ArrayList<>(songs);
+        Random rand = new Random();
 
-        List<Song> shuffledSongs = new ArrayList<>();
-        Song tmp;
+        for (int i = 0; i < shuffledSongs.size(); i++) {
+            int randomIndex = i + rand.nextInt(shuffledSongs.size() - i);
 
-        for (Song song : songs) {
-            for (int i = 0; i < songs.toArray().length - 2; i++) {
-                for (int j = 0; j < songs.toArray().length - i - 1; j++) {
-
-                    Song shu1 = songs.get(j);
-                    Song shu2 = songs.get(j + 1);
-
-                } if (mode == Mode.SHUFFLED) {
-
-                }
-            }
-
+            Song tmp = shuffledSongs.get(i);
+            shuffledSongs.set(i, shuffledSongs.get(randomIndex));
+            shuffledSongs.set(randomIndex, tmp);
         }
-        return shuffledSongs;
+    }
+
+    public void shuffleOFF() {
+        mode = Mode.NORMAL;
+    }
+
+    public List<Song> getCurrentList() {
+        if (mode == Mode.SHUFFLED && shuffledSongs != null) {
+            return shuffledSongs;
+        } else return songs;
     }
 
     public String getName() {
@@ -125,7 +107,7 @@ public class Playlist {
     }
 
     public Song getSpecificSong(int index) {
-        return songs.get(index);
+        return getCurrentList().get(index);
     }
 
     public void addSong(Song song) {
