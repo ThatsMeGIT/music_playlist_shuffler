@@ -16,5 +16,7 @@ public class MusicPlaylistShuffler {
             System.out.println("Error while loading Player");
         }
 
+        System.out.println("test");
+
     }
 }
