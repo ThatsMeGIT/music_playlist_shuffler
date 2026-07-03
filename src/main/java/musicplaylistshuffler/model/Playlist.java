@@ -1,19 +1,21 @@
 package musicplaylistshuffler.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class Playlist {
-    private String name;
-    private List<Song> songs;
+    private final String name;
+    private String description;
+    private final List<Song> songs;
     private List<Song> shuffledSongs;
-    private Mode mode; // from ENUM Mode
+    private Mode mode;
 
     @JsonCreator
     public Playlist(@JsonProperty("name") String name,
@@ -27,26 +29,25 @@ public class Playlist {
 
         this.name = name;
         this.songs = new ArrayList<>(songs);
+        this.mode = Mode.NORMAL;
     }
 
     public double averageSongLength() {
-        double averageLength = 0;
-        if (songs != null) {
-            for (Song song : songs) {
-                averageLength += song.getDuration();
-            }
-            return averageLength / songs.size();
-        } else return 0;
+        if (songs.isEmpty()) {
+            return 0;
+        }
+
+        return (double) playlistTimeLength() / songs.size();
     }
 
     public int playlistTimeLength() {
-        int playlistlength = 0;
-        if (songs != null) {
-            for (Song song : songs) {
-                playlistlength += song.getDuration();
-            }
-            return playlistlength;
-        } else return 0;
+        int playlistLength = 0;
+
+        for (Song song : songs) {
+            playlistLength += song.getDuration();
+        }
+
+        return playlistLength;
     }
 
     public String topGenre() {
@@ -54,60 +55,44 @@ public class Playlist {
             return null;
         }
 
-        Map<String, Integer> countGenre = new HashMap<>();
+        Map<String, Integer> genreCounts = new HashMap<>();
 
         for (Song song : songs) {
             String genre = song.getGenre();
-            countGenre.put(genre, countGenre.getOrDefault(genre, 0) + 1);
+            genreCounts.put(genre, genreCounts.getOrDefault(genre, 0) + 1);
         }
 
-        String topGenre = null;
-        int maxCount = 0;
+        String mostCommonGenre = null;
+        int highestCount = 0;
 
-        for (Map.Entry<String, Integer> entry : countGenre.entrySet()) {
-            if (entry.getValue() > maxCount) {
-                maxCount = entry.getValue();
-                topGenre = entry.getKey();
+        for (Map.Entry<String, Integer> entry : genreCounts.entrySet()) {
+            if (entry.getValue() > highestCount) {
+                highestCount = entry.getValue();
+                mostCommonGenre = entry.getKey();
             }
         }
-        return topGenre;
+
+        return mostCommonGenre;
     }
 
-    public void shuffleON() {
+    public void shuffleOn() {
         mode = Mode.SHUFFLED;
-
         shuffledSongs = new ArrayList<>(songs);
-        Random rand = new Random();
-
-        for (int i = 0; i < shuffledSongs.size(); i++) {
-            int randomIndex = i + rand.nextInt(shuffledSongs.size() - i);
-
-            Song tmp = shuffledSongs.get(i);
-            shuffledSongs.set(i, shuffledSongs.get(randomIndex));
-            shuffledSongs.set(randomIndex, tmp);
-        }
+        Collections.shuffle(shuffledSongs);
     }
 
-    public void shuffleOFF() {
+    public void shuffleOff() {
         mode = Mode.NORMAL;
+        shuffledSongs = null;
     }
 
+    @JsonIgnore
     public List<Song> getCurrentList() {
         if (mode == Mode.SHUFFLED && shuffledSongs != null) {
-            return shuffledSongs;
-        } else return songs;
-    }
+            return new ArrayList<>(shuffledSongs);
+        }
 
-    public String getName() {
-        return name;
-    }
-
-    public List<Song> getSongs() {
-        return new ArrayList<Song>(songs);
-    }
-
-    public Mode getMode() {
-        return mode;
+        return new ArrayList<>(songs);
     }
 
     public Song getSpecificSong(int index) {
@@ -115,10 +100,39 @@ public class Playlist {
     }
 
     public void addSong(Song song) {
+        if (song == null) {
+            throw new IllegalArgumentException("song must not be null");
+        }
+
         songs.add(song);
+
+        if (mode == Mode.SHUFFLED) {
+            shuffleOn();
+        }
     }
 
     public void removeSong(Song song) {
         songs.remove(song);
+
+        if (mode == Mode.SHUFFLED) {
+            shuffleOn();
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<Song> getSongs() {
+        return new ArrayList<>(songs);
+    }
+
+    @JsonIgnore
+    public Mode getMode() {
+        return mode;
     }
 }

@@ -1,11 +1,14 @@
 package musicplaylistshuffler.ui;
 
 import musicplaylistshuffler.model.Player;
+import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.storage.StorageService;
 
 import javax.swing.*;
 import javax.xml.xpath.XPath;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 
 public class MainFrame extends JFrame {
@@ -27,6 +30,19 @@ public class MainFrame extends JFrame {
         this.menuBar = new MenuBar(actionHandler);
         this.playlistTableModel = new PlaylistTableModel(player);
         this.playlistTable = new JTable(playlistTableModel);
+
+        playlistTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent event) {
+                if (event.getClickCount() == 2) {
+                    int row = playlistTable.getSelectedRow();
+
+                    if (row >= 0) {
+                        Playlist playlist = player.getPlaylists().get(row);
+                        new PlaylistDialog(MainFrame.this, player, playlist);
+                    }
+                }
+            }
+        });
 
         setTitle("Best Music Player");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -58,6 +74,7 @@ public class MainFrame extends JFrame {
         setVisible(true);
         refreshPlayerView();
     }
+
 
     public void refreshPlayerView() {
         playbackControlPanel.refreshPlayerView();

@@ -76,7 +76,7 @@ class PlaylistTest {
 
         Playlist playlist = new Playlist("Playlist1", List.of(song1, song2));
 
-        playlist.shuffleOFF();
+        playlist.shuffleOff();
 
         List<Song> result = playlist.getCurrentList();
 
@@ -92,8 +92,8 @@ class PlaylistTest {
 
         Playlist playlist = new Playlist("Playlist1", List.of(song1, song2));
 
-        playlist.shuffleON();
-        playlist.shuffleOFF();
+        playlist.shuffleOn();
+        playlist.shuffleOff();
 
         List<Song> result = playlist.getCurrentList();
 
@@ -109,7 +109,7 @@ class PlaylistTest {
 
         Playlist playlist = new Playlist("Playlist1", List.of(song1, song2, song3));
 
-        playlist.shuffleON();
+        playlist.shuffleOn();
 
         List<Song> result = playlist.getCurrentList();
 
@@ -127,7 +127,7 @@ class PlaylistTest {
 
         Playlist playlist = new Playlist("Playlist1", List.of(song1, song2));
 
-        playlist.shuffleON();
+        playlist.shuffleOn();
 
         assertEquals(Mode.SHUFFLED, playlist.getMode());
     }

@@ -3,13 +3,15 @@ package musicplaylistshuffler.ui;
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
+import musicplaylistshuffler.utils.TimeUtils;
 
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 
 public class PlaylistTableModel extends AbstractTableModel {
 
     private final Player player;
-    private static final String[] COLUMNS = {"Name", "Duration (m)", "Created at", "Edited at"};
+    private static final String[] COLUMNS = {"Button", "Name", "Songs", "Duration", "Top Genre"};
 
     public PlaylistTableModel(Player player){
         this.player = player;
@@ -38,29 +40,19 @@ public class PlaylistTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         Playlist playlist = player.getPlaylists().get(rowIndex);
 
-        switch (columnIndex){
+        switch (columnIndex) {
             case 0:
                 return playlist.getName();
             case 1:
-                return getTotalDuration(playlist);
+                return playlist.getSongs().size();
             case 2:
-                return "";
-                //return playlist.getCreatedDate
+                return TimeUtils.formatDuration(playlist.playlistTimeLength());
             case 3:
-                //return playlist.getEditedAdd
-                return "";
+                return playlist.topGenre();
             default:
                 return "";
         }
     }
 
-    private int getTotalDuration(Playlist playlist){
-        int totalDuration = 0;
 
-        for(Song song : playlist.getSongs()){
-            totalDuration = totalDuration + song.getDuration();
-
-        }
-        return totalDuration / 60;
-    }
 }

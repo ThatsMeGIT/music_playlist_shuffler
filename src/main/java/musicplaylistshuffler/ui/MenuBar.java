@@ -15,13 +15,7 @@ public class MenuBar extends JMenuBar {
         addPlaylistItem.setActionCommand("addPlaylist");
         addPlaylistItem.addActionListener(actionHandler);
 
-        JMenuItem exitItem = new JMenuItem("Exit");
-        exitItem.setActionCommand("exit");
-        exitItem.addActionListener(actionHandler);
-
         menu.add(addPlaylistItem);
-        menu.addSeparator();
-        menu.add(exitItem);
 
         return menu;
     }

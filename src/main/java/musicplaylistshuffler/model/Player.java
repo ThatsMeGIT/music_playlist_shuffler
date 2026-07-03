@@ -34,6 +34,30 @@ public class Player {
         this.mode = mode != null ? mode : Mode.NORMAL;
     }
 
+    public void playPlaylist(Playlist playlist) {
+        if (playlist == null || playlist.getSongs().isEmpty()) {
+            return;
+        }
+
+        currentPlaylistIndex = playlists.indexOf(playlist);
+        currentSongIndex = 0;
+        currentSong = playlist.getSpecificSong(0);
+        playedSeconds = 0;
+        play();
+    }
+
+    public void tick(){
+        if(status != Status.PLAYING || currentSong == null){
+            return;
+        }
+
+        playedSeconds = playedSeconds + 1;
+
+        if (playedSeconds >= currentSong.getDuration()){
+            skip();
+        }
+    }
+
     public int getPlayedSeconds() {
         return playedSeconds;
     }
