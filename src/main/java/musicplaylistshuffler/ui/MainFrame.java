@@ -63,5 +63,4 @@ public class MainFrame extends JFrame {
         playbackControlPanel.refreshPlayerView();
         playlistTableModel.fireTableDataChanged();
     }
-
 }
