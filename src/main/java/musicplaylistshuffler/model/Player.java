@@ -1,6 +1,7 @@
 package musicplaylistshuffler.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -13,7 +14,6 @@ public class Player {
     private int currentPlaylistIndex;
     private int currentSongIndex;
     private Status status;
-    private Mode mode;
 
     @JsonCreator
     public Player(
@@ -22,8 +22,7 @@ public class Player {
             @JsonProperty("playlists") List<Playlist> playlists,
             @JsonProperty("currentPlaylistIndex") int currentPlaylistIndex,
             @JsonProperty("currentSongIndex") int currentSongIndex,
-            @JsonProperty("status") Status status,
-            @JsonProperty("mode") Mode mode
+            @JsonProperty("status") Status status
     ) {
         this.playedSeconds = playedSeconds;
         this.currentSong = currentSong;
@@ -31,11 +30,10 @@ public class Player {
         this.currentPlaylistIndex = currentPlaylistIndex;
         this.currentSongIndex = currentSongIndex;
         this.status = status != null ? status : Status.PAUSED;
-        this.mode = mode != null ? mode : Mode.NORMAL;
     }
 
     public void playPlaylist(Playlist playlist) {
-        if (playlist == null || playlist.getSongs().isEmpty()) {
+        if (playlist == null || playlist.getCurrentList().isEmpty()) {
             return;
         }
 
@@ -89,10 +87,6 @@ public class Player {
         return status;
     }
 
-    public Mode getMode() {
-        return mode;
-    }
-
     public void setCurrentSong(Song currentSong) {
         this.currentSong = currentSong;
     }
@@ -108,7 +102,7 @@ public class Player {
     public void skip() {
         Playlist currentPlaylist = getCurrentPlaylist();
 
-        if (currentPlaylist == null || currentPlaylist.getSongs().isEmpty()) {
+        if (currentPlaylist == null || currentPlaylist.getCurrentList().isEmpty()) {
             currentSong = null;
             playedSeconds = 0;
             return;
@@ -116,7 +110,7 @@ public class Player {
 
         currentSongIndex++;
 
-        if (currentSongIndex >= currentPlaylist.getSongs().size()) {
+        if (currentSongIndex >= currentPlaylist.getCurrentList().size()) {
             currentSongIndex = 0;
         }
 
@@ -127,7 +121,7 @@ public class Player {
     public void previous() {
         Playlist currentPlaylist = getCurrentPlaylist();
 
-        if (currentPlaylist == null || currentPlaylist.getSongs().isEmpty()) {
+        if (currentPlaylist == null || currentPlaylist.getCurrentList().isEmpty()) {
             currentSong = null;
             playedSeconds = 0;
             return;
@@ -136,14 +130,15 @@ public class Player {
         currentSongIndex--;
 
         if (currentSongIndex < 0) {
-            currentSongIndex = currentPlaylist.getSongs().size()-1;
+            currentSongIndex = currentPlaylist.getCurrentList().size()-1;
         }
 
         currentSong = currentPlaylist.getSpecificSong(currentSongIndex);
         playedSeconds = 0;
     }
 
-    private Playlist getCurrentPlaylist() {
+    @JsonIgnore
+    public Playlist getCurrentPlaylist() {
         if (playlists == null || playlists.isEmpty()) {
             return null;
         }
@@ -153,5 +148,24 @@ public class Player {
         }
 
         return playlists.get(currentPlaylistIndex);
+    }
+
+    public void toggleShuffle() {
+        Playlist playlist = getCurrentPlaylist();
+
+        if (playlist == null) {
+            return;
+        }
+
+        Song oldSong = currentSong;
+
+        if (playlist.isShuffled()) {
+            playlist.shuffleOff();
+        } else  {
+            playlist.shuffleOn();
+        }
+
+        currentSongIndex = playlist.getCurrentList().indexOf(oldSong);
+        currentSong = playlist.getSpecificSong(currentSongIndex);
     }
 }

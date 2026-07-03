@@ -87,12 +87,17 @@ public class Playlist {
     }
 
     @JsonIgnore
+    public boolean isShuffled() {
+        return mode == Mode.SHUFFLED;
+    }
+
+    @JsonIgnore
     public List<Song> getCurrentList() {
         if (mode == Mode.SHUFFLED && shuffledSongs != null) {
-            return new ArrayList<>(shuffledSongs);
+            return shuffledSongs;
         }
 
-        return new ArrayList<>(songs);
+        return songs;
     }
 
     public Song getSpecificSong(int index) {

@@ -15,6 +15,7 @@ public class PlaybackControlPanel extends JPanel {
     private JLabel songTitleLabel;
     private JLabel artistLabel;
     private JProgressBar progressBar;
+    private JToggleButton shuffleButton;
 
     public PlaybackControlPanel(Player player, MainActionHandler actionHandler) {
         this.player = player;
@@ -92,7 +93,7 @@ public class PlaybackControlPanel extends JPanel {
     private JPanel createShuffleControlPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 0));
 
-        JToggleButton shuffleButton = new JToggleButton("\uD83D\uDD00");
+        shuffleButton = new JToggleButton("\uD83D\uDD00");
         shuffleButton.setActionCommand("shuffle");
         shuffleButton.addActionListener(actionHandler);
 
@@ -107,6 +108,7 @@ public class PlaybackControlPanel extends JPanel {
     public void refreshPlayerView() {
         songTitleLabel.setText(player.getCurrentSong().getTitle());
         artistLabel.setText(player.getCurrentSong().getArtist());
+        shuffleButton.setSelected(player.getCurrentPlaylist().isShuffled());
 
         progressBar.setMaximum(player.getCurrentSong().getDuration());
         progressBar.setValue(player.getPlayedSeconds());

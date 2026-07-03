@@ -67,10 +67,10 @@ public class PlaylistDialog extends JDialog {
 
         String[] columnNames = {"Title", "Artist", "Genre", "Duration"};
 
-        Object[][] data = new Object[playlist.getSongs().size()][4];
+        Object[][] data = new Object[playlist.getCurrentList().size()][4];
 
-        for (int i = 0; i < playlist.getSongs().size(); i++) {
-            var song = playlist.getSongs().get(i);
+        for (int i = 0; i < playlist.getCurrentList().size(); i++) {
+            var song = playlist.getCurrentList().get(i);
 
             data[i][0] = song.getTitle();
             data[i][1] = song.getArtist();

@@ -20,8 +20,7 @@ class PlayerTest {
                 List.of(playlist),
                 0,
                 0,
-                Status.PLAYING,
-                Mode.SHUFFLED
+                Status.PLAYING
         );
 
         assertEquals(30, player.getPlayedSeconds());
@@ -30,20 +29,18 @@ class PlayerTest {
         assertEquals(0, player.getCurrentPlaylistIndex());
         assertEquals(0, player.getCurrentSongIndex());
         assertEquals(Status.PLAYING, player.getStatus());
-        assertEquals(Mode.SHUFFLED, player.getMode());
     }
 
     @Test
     void shouldDefaultStatusAndModeWhenMissing() {
-        Player player = playerAtSongIndex(0, null, null);
+        Player player = playerAtSongIndex(0, null);
 
         assertEquals(Status.PAUSED, player.getStatus());
-        assertEquals(Mode.NORMAL, player.getMode());
     }
 
     @Test
     void shouldPlayAndPause() {
-        Player player = playerAtSongIndex(0, Status.PAUSED, Mode.NORMAL);
+        Player player = playerAtSongIndex(0, Status.PAUSED);
 
         player.play();
         assertEquals(Status.PLAYING, player.getStatus());
@@ -54,7 +51,7 @@ class PlayerTest {
 
     @Test
     void shouldSkipToNextSongAndResetPlayedSeconds() {
-        Player player = playerAtSongIndex(0, Status.PAUSED, Mode.NORMAL);
+        Player player = playerAtSongIndex(0, Status.PAUSED);
 
         player.skip();
 
@@ -65,7 +62,7 @@ class PlayerTest {
 
     @Test
     void shouldSkipFromLastSongToFirstSong() {
-        Player player = playerAtSongIndex(2, Status.PAUSED, Mode.NORMAL);
+        Player player = playerAtSongIndex(2, Status.PAUSED);
 
         player.skip();
 
@@ -75,7 +72,7 @@ class PlayerTest {
 
     @Test
     void shouldGoToPreviousSongAndResetPlayedSeconds() {
-        Player player = playerAtSongIndex(2, Status.PAUSED, Mode.NORMAL);
+        Player player = playerAtSongIndex(2, Status.PAUSED);
 
         player.previous();
 
@@ -86,7 +83,7 @@ class PlayerTest {
 
     @Test
     void shouldGoFromSecondSongToFirstSong() {
-        Player player = playerAtSongIndex(1, Status.PAUSED, Mode.NORMAL);
+        Player player = playerAtSongIndex(1, Status.PAUSED);
 
         player.previous();
 
@@ -96,7 +93,7 @@ class PlayerTest {
 
     @Test
     void shouldGoFromFirstSongToLastSong() {
-        Player player = playerAtSongIndex(0, Status.PAUSED, Mode.NORMAL);
+        Player player = playerAtSongIndex(0, Status.PAUSED);
 
         player.previous();
 
@@ -124,7 +121,7 @@ class PlayerTest {
         assertEquals(0, player.getPlayedSeconds());
     }
 
-    private static Player playerAtSongIndex(int currentSongIndex, Status status, Mode mode) {
+    private static Player playerAtSongIndex(int currentSongIndex, Status status) {
         List<Song> songs = List.of(
                 song("First Song"),
                 song("Second Song"),
@@ -138,8 +135,7 @@ class PlayerTest {
                 List.of(playlist),
                 0,
                 currentSongIndex,
-                status,
-                mode
+                status
         );
     }
 
@@ -150,8 +146,7 @@ class PlayerTest {
                 List.of(playlist),
                 0,
                 0,
-                Status.PAUSED,
-                Mode.NORMAL
+                Status.PAUSED
         );
     }
 
