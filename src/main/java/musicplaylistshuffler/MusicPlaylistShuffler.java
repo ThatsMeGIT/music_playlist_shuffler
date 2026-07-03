@@ -1,22 +1,19 @@
 package musicplaylistshuffler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import musicplaylistshuffler.model.Player;
-import musicplaylistshuffler.model.Playlist;
-import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.storage.StorageService;
 import musicplaylistshuffler.ui.MainFrame;
 
-import java.io.IOException;
-import java.util.List;
-
 public class MusicPlaylistShuffler {
-    public static void main(String[] args){
-        Player player = StorageService.startPlayer("src/main/resources/test.json");
+    public static void main(String[] args) {
+
+        String path = "src/main/resources/test.json";
+        Player player = StorageService.loadPlayerFromJson(path);
+
         if(player != null){
             new MainFrame(player, path);
         } else {
-            System.out.println("Error: Reading json File");
+            System.out.println("Error while loading Player");
         }
     }
 }
