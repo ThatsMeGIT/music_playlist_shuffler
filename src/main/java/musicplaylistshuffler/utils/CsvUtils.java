@@ -15,9 +15,10 @@ public class CsvUtils {
 
     private CsvUtils(){}
 
-    public static List<Song> loadSongsFromCsv(String path) throws Exception{
+    public static List<Song> loadSongsFromCsv(String path) throws Exception {
         List<Song> songs = new ArrayList<>();
-        Reader reader = new FileReader(path);
+
+        try (Reader reader = new FileReader(path)) {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT
                     .builder()
                     .setDelimiter(DELIMITER)
@@ -25,6 +26,7 @@ public class CsvUtils {
                     .setSkipHeaderRecord(true)
                     .build()
                     .parse(reader);
+
             for (CSVRecord record : records) {
                 if (record.size() != EXPECTED_COLUMNS) {
                     System.out.println(record.getRecordNumber() + "Line is invalid");
@@ -33,8 +35,9 @@ public class CsvUtils {
                     songs.add(parseLine(record));
                 }
             }
-            return songs;
+        }
 
+        return songs;
     }
 
 
