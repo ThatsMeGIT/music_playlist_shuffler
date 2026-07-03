@@ -16,6 +16,8 @@ public class MainFrame extends JFrame {
     private final MainActionHandler actionHandler;
     private final PlaybackControlPanel playbackControlPanel;
     private final MenuBar menuBar;
+    private final PlaylistTableModel playlistTableModel;
+    private final JTable playlistTable;
 
     public MainFrame(Player player, String path) {
         this.player = player;
@@ -23,8 +25,10 @@ public class MainFrame extends JFrame {
         this.actionHandler = new MainActionHandler(player, this);
         this.playbackControlPanel = new PlaybackControlPanel(player, actionHandler);
         this.menuBar = new MenuBar(actionHandler);
+        this.playlistTableModel = new PlaylistTableModel(player);
+        this.playlistTable = new JTable(playlistTableModel);
 
-        setTitle("Best music Player");
+        setTitle("Best Music Player");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -46,8 +50,10 @@ public class MainFrame extends JFrame {
             setIconImage(new ImageIcon(iconUrl).getImage());
         }
 
-        add(playbackControlPanel, BorderLayout.SOUTH);
         setJMenuBar(menuBar);
+
+        add(playbackControlPanel, BorderLayout.SOUTH);
+        add(new JScrollPane(playlistTable), BorderLayout.CENTER);
 
         setVisible(true);
         refreshPlayerView();
@@ -55,6 +61,7 @@ public class MainFrame extends JFrame {
 
     public void refreshPlayerView() {
         playbackControlPanel.refreshPlayerView();
+        playlistTableModel.fireTableDataChanged();
     }
 
 }

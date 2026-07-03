@@ -5,6 +5,7 @@ import musicplaylistshuffler.model.Status;
 import musicplaylistshuffler.storage.StorageService;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -46,6 +47,12 @@ public class MainActionHandler implements ActionListener {
 
     private void handleAddPlaylist() {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Choose your Playlist");
+
+        FileNameExtensionFilter csvFilter = new FileNameExtensionFilter("CSV-File (*.csv)", "csv");
+
+        fileChooser.setFileFilter(csvFilter);
+        fileChooser.setAcceptAllFileFilterUsed(false);
 
         int result = fileChooser.showOpenDialog(mainFrame);
         if (result != JFileChooser.APPROVE_OPTION) {
