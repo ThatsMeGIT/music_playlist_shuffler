@@ -1,24 +1,51 @@
 package musicplaylistshuffler.utils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import musicplaylistshuffler.model.Song;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+
+import java.io.FileReader;
+import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CsvUtils {
-    private CsvUtils() {
+    private static String DELIMITER = ";";
+    private static int EXPECTED_COLUMNS = 4;
+
+    private CsvUtils(){}
+
+    public static List<Song> loadSongsFromCsv(String path) throws Exception{
+        List<Song> songs = new ArrayList<>();
+        Reader reader = new FileReader(path);
+            Iterable<CSVRecord> records = CSVFormat.DEFAULT
+                    .builder()
+                    .setDelimiter(DELIMITER)
+                    .setHeader()
+                    .setSkipHeaderRecord(true)
+                    .build()
+                    .parse(reader);
+            for (CSVRecord record : records) {
+                if (record.size() != EXPECTED_COLUMNS) {
+                    System.out.println(record.getRecordNumber() + "Line is invalid");
+                    return songs;
+                } else {
+                    songs.add(parseLine(record));
+                }
+            }
+            return songs;
+
     }
 
-    public static int countRows(String path) throws IOException {
-        return readLines(path).size();
-    }
 
-    public static List<String> readLines(String path) throws IOException {
-        return Files.readAllLines(Path.of(path));
-    }
+    private static Song parseLine(CSVRecord record) {
+        String title = record.get(0);
+        String artist = record.get(1);
+        int duration = Integer.parseInt(record.get(2));
+        String genre = record.get(3);
 
-    public static String[] splitCsvLine(String line, String delimiter) {
-        return line.split(",");
+        return new Song(title, artist, duration, genre);
     }
-
 }
+
+

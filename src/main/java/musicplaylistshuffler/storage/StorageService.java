@@ -1,48 +1,60 @@
 package musicplaylistshuffler.storage;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
-import musicplaylistshuffler.utils.FileUtils;
+import musicplaylistshuffler.utils.CsvUtils;
 import musicplaylistshuffler.utils.JsonUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.security.spec.ECField;
+import java.util.List;
 
-public class StorageService {
+public class StorageService{
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    public static boolean addNewPlaylistFromCsv(Player player, String path, String playlistName) {
+        if (player == null || path == null || path.isBlank() || playlistName == null || playlistName.isBlank()) {
+            return false;
+        }
 
-    private StorageService() {
+        try {
+            List<Song> songs = CsvUtils.loadSongsFromCsv(path);
+
+            if (songs == null || songs.isEmpty()) {
+                return false;
+            } else {
+                Playlist playlist = new Playlist(playlistName, songs);
+                return player.addPlaylist(playlist);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error while creating Playlist from Csv: " + e);
+            return false;
+        }
     }
 
+    public static Player loadPlayerFromJson(String path) {
+        if (path == null || path.isBlank()) {
+            return null;
+        }
 
-    public static Player startPlayer(String path) {
-        if (FileUtils.exists(path) && FileUtils.isReadable(path) && FileUtils.checkExtension(path, "json")) {
-            try {
-                String json = FileUtils.readAll(path);
-                JsonNode node = mapper.readTree(json);
-                return JsonUtils.fromJson(node, Player.class);
-            } catch (Exception e) {
-                System.out.println("Error: " + e);
-                return null;
-            }
-        } else {
+        try {
+            return JsonUtils.loadPlayerFromJson(path);
+        } catch (Exception e) {
             return null;
         }
     }
 
-    public static void savePlayerChanges() {
+    public static boolean savePlayerToJson(Player player, String path) {
+        if (path == null || path.isBlank()) {
+            return false;
+        }
 
-    }
-
-    public static void createNewPlaylist() {
-
+        try {
+            JsonUtils.savePlayerToJson(player, path);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

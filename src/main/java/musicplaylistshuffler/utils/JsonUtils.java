@@ -1,21 +1,26 @@
 package musicplaylistshuffler.utils;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import musicplaylistshuffler.model.Player;
+
+import java.nio.file.Path;
 
 public class JsonUtils {
-    private static ObjectMapper mapper = new ObjectMapper();
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
 
     private JsonUtils() {
     }
 
-    public static <T> T fromJson(JsonNode node, Class<T> tclass) {
-        try {
-            return mapper.treeToValue(node, tclass);
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
-            return null;
-        }
+    public static Player loadPlayerFromJson(String path) throws Exception {
+        Path jsonPath = Path.of(path);
+        return OBJECT_MAPPER.readValue(jsonPath.toFile(), Player.class);
+    }
+
+    public static void savePlayerToJson(Player player, String path) throws Exception {
+        Path jsonPath = Path.of(path);
+        OBJECT_MAPPER.writeValue(jsonPath.toFile(), player);
     }
 
 
