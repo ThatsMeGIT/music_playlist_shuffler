@@ -89,7 +89,7 @@ public class PlaybackControlPanel extends JPanel{
     private JPanel createShuffleControlPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 0));
 
-        JToggleButton shuffleButton = new JToggleButton("🔀");
+        JToggleButton shuffleButton = new JToggleButton("\uD83D\uDD00");
         shuffleButton.setActionCommand("shuffle");
         shuffleButton.addActionListener(actionHandler);
 

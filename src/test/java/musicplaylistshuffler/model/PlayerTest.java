@@ -21,7 +21,7 @@ class PlayerTest {
                 0,
                 0,
                 Status.PLAYING,
-                Mode.SHUFFLE
+                Mode.SHUFFLED
         );
 
         assertEquals(30, player.getPlayedSeconds());
@@ -30,7 +30,7 @@ class PlayerTest {
         assertEquals(0, player.getCurrentPlaylistIndex());
         assertEquals(0, player.getCurrentSongIndex());
         assertEquals(Status.PLAYING, player.getStatus());
-        assertEquals(Mode.SHUFFLE, player.getMode());
+        assertEquals(Mode.SHUFFLED, player.getMode());
     }
 
     @Test

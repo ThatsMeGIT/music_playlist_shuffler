@@ -1,6 +1,7 @@
 package musicplaylistshuffler.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Random;
 
 public class Playlist {
     private String name;
+    private String description;
     private List<Song> songs;
     private List<Song> shuffledSongs;
     private Mode mode; // from ENUM Mode
@@ -92,6 +94,7 @@ public class Playlist {
         mode = Mode.NORMAL;
     }
 
+    @JsonIgnore
     public List<Song> getCurrentList() {
         if (mode == Mode.SHUFFLED && shuffledSongs != null) {
             return shuffledSongs;
@@ -102,10 +105,13 @@ public class Playlist {
         return name;
     }
 
+    public String getDescription(){return description;}
+
     public List<Song> getSongs() {
         return new ArrayList<Song>(songs);
     }
 
+    @JsonIgnore
     public Mode getMode() {
         return mode;
     }
