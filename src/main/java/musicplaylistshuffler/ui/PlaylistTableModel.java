@@ -11,7 +11,7 @@ import javax.swing.table.AbstractTableModel;
 public class PlaylistTableModel extends AbstractTableModel {
 
     private final Player player;
-    private static final String[] COLUMNS = {"Button", "Name", "Songs", "Duration", "Top Genre"};
+    private static final String[] COLUMNS = {"Name", "Songs", "Duration", "Top Genre"};
 
     public PlaylistTableModel(Player player){
         this.player = player;
