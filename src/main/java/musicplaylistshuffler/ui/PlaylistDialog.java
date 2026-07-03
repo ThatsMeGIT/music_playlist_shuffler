@@ -1,6 +1,7 @@
 package musicplaylistshuffler.ui;
 
 import musicplaylistshuffler.model.Playlist;
+import musicplaylistshuffler.utils.TimeUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,8 +29,8 @@ public class PlaylistDialog extends JDialog {
         JPanel statPanel = new JPanel();
         statPanel.add(createStatPanel());
 
-        tabs.addTab("Playlist Overview", playlistPanel);
-        tabs.addTab("Playlist Stats", statPanel);
+        tabs.addTab("Overview", playlistPanel);
+        tabs.addTab("Details", statPanel);
 
         add(tabs);
 
@@ -52,7 +53,7 @@ public class PlaylistDialog extends JDialog {
     private JPanel createSongTablePanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        String[] columnNames = {"Titel", "Artist", "Genre", "Dauer"};
+        String[] columnNames = {"Title", "Artist", "Genre", "Duration"};
 
         Object[][] data = new Object[playlist.getSongs().size()][4];
 
@@ -62,10 +63,15 @@ public class PlaylistDialog extends JDialog {
             data[i][0] = song.getTitle();
             data[i][1] = song.getArtist();
             data[i][2] = song.getGenre();
-            data[i][3] = song.getDuration();
+            data[i][3] = TimeUtils.formatDuration(song.getDuration());
         }
 
-        JTable songTable = new JTable(data, columnNames);
+        JTable songTable = new JTable(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         JScrollPane scrollPane = new JScrollPane(songTable);
 
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -77,16 +83,16 @@ public class PlaylistDialog extends JDialog {
         JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        panel.add(new JLabel("Anzahl Songs:"));
+        panel.add(new JLabel("Number of Songs:"));
         panel.add(new JLabel(String.valueOf(playlist.getSongs().size())));
 
-        panel.add(new JLabel("Gesamtdauer:"));
+        panel.add(new JLabel("Total Length:"));
         panel.add(new JLabel(formatDuration(playlist.playlistTimeLength())));
 
-        panel.add(new JLabel("Durchschnittliche Songlänge:"));
+        panel.add(new JLabel("Average Song Length:"));
         panel.add(new JLabel(formatDuration((int) playlist.averageSongLength())));
 
-        panel.add(new JLabel("Häufigstes Genre:"));
+        panel.add(new JLabel("Top Genre:"));
         panel.add(new JLabel(playlist.topGenre() != null ? playlist.topGenre() : "-"));
 
         return panel;

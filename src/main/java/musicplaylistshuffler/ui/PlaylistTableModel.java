@@ -3,13 +3,13 @@ package musicplaylistshuffler.ui;
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
+import musicplaylistshuffler.utils.TimeUtils;
 
 import javax.swing.table.AbstractTableModel;
 
 public class PlaylistTableModel extends AbstractTableModel {
 
-    private final Player player;
-    private static final String[] COLUMNS = {"Name", "Duration (m)", "Created at", "Edited at"};
+    private final Player player;private static final String[] COLUMNS = {"Name", "Songs", "Duration", "Top Genre"};
 
     public PlaylistTableModel(Player player){
         this.player = player;
@@ -35,20 +35,23 @@ public class PlaylistTableModel extends AbstractTableModel {
     }
 
     @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex){
+        return false;
+    }
+
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Playlist playlist = player.getPlaylists().get(rowIndex);
 
-        switch (columnIndex){
+        switch (columnIndex) {
             case 0:
                 return playlist.getName();
             case 1:
-                return getTotalDuration(playlist);
+                return playlist.getSongs().size();
             case 2:
-                return "";
-                //return playlist.getCreatedDate
+                return TimeUtils.formatDuration(playlist.playlistTimeLength());
             case 3:
-                //return playlist.getEditedAdd
-                return "";
+                return playlist.topGenre();
             default:
                 return "";
         }
@@ -63,4 +66,6 @@ public class PlaylistTableModel extends AbstractTableModel {
         }
         return totalDuration / 60;
     }
+
+
 }
