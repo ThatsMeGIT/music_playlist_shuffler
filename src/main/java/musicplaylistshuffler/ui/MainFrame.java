@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
 
                     if (row >= 0) {
                         Playlist playlist = player.getPlaylists().get(row);
-                        new PlaylistDialog(MainFrame.this, playlist);
+                        new PlaylistDialog(MainFrame.this, player, playlist);
                     }
                 }
             }

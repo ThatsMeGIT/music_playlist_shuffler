@@ -1,12 +1,13 @@
 package musicplaylistshuffler.ui;
 
 import musicplaylistshuffler.model.Player;
+import musicplaylistshuffler.utils.TimeUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class PlaybackControlPanel extends JPanel{
+public class PlaybackControlPanel extends JPanel {
 
     private final Player player;
     private final MainActionHandler actionHandler;
@@ -15,7 +16,7 @@ public class PlaybackControlPanel extends JPanel{
     private JLabel artistLabel;
     private JProgressBar progressBar;
 
-    public PlaybackControlPanel(Player player, MainActionHandler actionHandler){
+    public PlaybackControlPanel(Player player, MainActionHandler actionHandler) {
         this.player = player;
         this.actionHandler = actionHandler;
 
@@ -25,6 +26,8 @@ public class PlaybackControlPanel extends JPanel{
         add(createSongInfoPanel());
         add(createPlaybackControlPanel());
         add(createShuffleControlPanel());
+
+        startPlaybackTimer();
     }
 
     private JPanel createSongInfoPanel() {
@@ -58,7 +61,7 @@ public class PlaybackControlPanel extends JPanel{
         return panel;
     }
 
-    private JPanel createPlaybackControlPanel(){
+    private JPanel createPlaybackControlPanel() {
         JPanel panel = new JPanel(new BorderLayout(20, 10));
 
         JButton previousButton = new JButton("<");
@@ -101,11 +104,23 @@ public class PlaybackControlPanel extends JPanel{
         return panel;
     }
 
-    public void refreshPlayerView(){
+    public void refreshPlayerView() {
         songTitleLabel.setText(player.getCurrentSong().getTitle());
         artistLabel.setText(player.getCurrentSong().getArtist());
 
         progressBar.setMaximum(player.getCurrentSong().getDuration());
-        progressBar.setValue(50);
+        progressBar.setValue(player.getPlayedSeconds());
+
+        progressBar.setString(TimeUtils.formatDuration(player.getPlayedSeconds()) + " / " + TimeUtils.formatDuration(player.getCurrentSong().getDuration())
+        );
+    }
+
+    private void startPlaybackTimer() {
+        Timer timer = new Timer(1000, event -> {
+            player.tick();
+            refreshPlayerView();
+        });
+
+        timer.start();
     }
 }

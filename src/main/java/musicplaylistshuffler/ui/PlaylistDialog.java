@@ -1,5 +1,6 @@
 package musicplaylistshuffler.ui;
 
+import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.utils.TimeUtils;
 
@@ -9,11 +10,13 @@ import java.awt.*;
 public class PlaylistDialog extends JDialog {
 
     private final Playlist playlist;
+    private final Player player;
 
-    public PlaylistDialog(Frame owner, Playlist playlist) {
+    public PlaylistDialog(Frame owner, Player player, Playlist playlist) {
         super(owner, playlist.getName(), true);
 
         this.playlist = playlist;
+        this.player = player;
 
         setSize(600, 300);
         setLocationRelativeTo(owner);
@@ -38,11 +41,20 @@ public class PlaylistDialog extends JDialog {
     }
 
     private JPanel createPlaylistOverviewPanel(){
-        JPanel panel = new JPanel(new GridLayout(2,1));
+        JPanel panel = new JPanel(new GridLayout(3,1));
+
+        JButton playPlaylist = new JButton("▶");
+        playPlaylist.setActionCommand("playPlaylist");
+        playPlaylist.addActionListener(e -> {
+            player.playPlaylist(playlist);
+            dispose();
+        });
+
 
         JLabel name = new JLabel(playlist.getName());
         JLabel description = new JLabel(playlist.getDescription());
 
+        panel.add(playPlaylist);
         panel.add(name);
         panel.add(description);
 
@@ -87,10 +99,10 @@ public class PlaylistDialog extends JDialog {
         panel.add(new JLabel(String.valueOf(playlist.getSongs().size())));
 
         panel.add(new JLabel("Total Length:"));
-        panel.add(new JLabel(formatDuration(playlist.playlistTimeLength())));
+        panel.add(new JLabel(TimeUtils.formatDuration(playlist.playlistTimeLength())));
 
         panel.add(new JLabel("Average Song Length:"));
-        panel.add(new JLabel(formatDuration((int) playlist.averageSongLength())));
+        panel.add(new JLabel(TimeUtils.formatDuration((int) playlist.averageSongLength())));
 
         panel.add(new JLabel("Top Genre:"));
         panel.add(new JLabel(playlist.topGenre() != null ? playlist.topGenre() : "-"));
@@ -98,15 +110,5 @@ public class PlaylistDialog extends JDialog {
         return panel;
     }
 
-    private String formatDuration(int seconds) {
-        int hours = seconds / 3600;
-        int minutes = (seconds % 3600) / 60;
-        int secs = seconds % 60;
-
-        if (hours > 0) {
-            return String.format("%d:%02d:%02d", hours, minutes, secs);
-        }
-        return String.format("%d:%02d", minutes, secs);
-    }
 
 }

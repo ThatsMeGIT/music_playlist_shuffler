@@ -37,6 +37,9 @@ public class MainActionHandler implements ActionListener {
             case "addPlaylist":
                 handleAddPlaylist();
                 break;
+            case "shuffle":
+               // player.toggleShuffle();
+                break;
             default:
                 System.out.println("Unknown action: " + e.getActionCommand());
         }
