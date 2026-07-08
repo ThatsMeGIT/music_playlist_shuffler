@@ -15,7 +15,12 @@ public class MenuBar extends JMenuBar {
         addPlaylistItem.setActionCommand("addPlaylist");
         addPlaylistItem.addActionListener(actionHandler);
 
+        JMenuItem addSongItem = new JMenuItem("Add Song");
+        addSongItem.setActionCommand("addSong");
+        addSongItem.addActionListener(actionHandler);
+
         menu.add(addPlaylistItem);
+        menu.add(addSongItem);
 
         return menu;
     }
