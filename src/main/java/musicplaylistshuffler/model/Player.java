@@ -68,6 +68,14 @@ public class Player {
         return playlists;
     }
 
+    public void removePlaylist(Playlist playlist) {
+        if (playlists == null ){
+            return;
+        }
+        System.out.println("Test");
+        playlists.add(playlist);
+    }
+
     public boolean addPlaylist(Playlist playlist){
         if (playlists == null ){
             return false;
@@ -137,7 +145,6 @@ public class Player {
         playedSeconds = 0;
     }
 
-    @JsonIgnore
     public Playlist getCurrentPlaylist() {
         if (playlists == null || playlists.isEmpty()) {
             return null;

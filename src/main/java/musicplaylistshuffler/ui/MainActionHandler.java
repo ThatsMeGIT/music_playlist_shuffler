@@ -82,10 +82,14 @@ public class MainActionHandler implements ActionListener {
                 playlistName
         );
 
+
+
         if (success) {
             JOptionPane.showMessageDialog(mainFrame, "Playlist added successfully.");
         } else {
             JOptionPane.showMessageDialog(mainFrame, "Could not add playlist.");
         }
+
+
     }
 }

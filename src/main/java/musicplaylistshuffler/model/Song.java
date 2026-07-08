@@ -1,7 +1,7 @@
 package musicplaylistshuffler.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+//import com.fasterxml.jackson.annotation.JsonCreator;
+//import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Song {
     private String title;
@@ -9,11 +9,11 @@ public class Song {
     private int duration;
     private String genre;
 
-    @JsonCreator
-    public Song(@JsonProperty("title") String title,
-                @JsonProperty("artist") String artist,
-                @JsonProperty("duration") int duration,
-                @JsonProperty("genre") String genre) {
+
+    public Song(String title,
+               String artist,
+            int duration,
+   String genre) {
         if (title == null || title.isBlank()) {
             throw new IllegalArgumentException("title must not be null or blank");
         }

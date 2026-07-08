@@ -1,11 +1,11 @@
 package musicplaylistshuffler.utils;
 
+import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,13 +41,30 @@ public class CsvUtils {
     }
 
 
-    private static Song parseLine(CSVRecord record) {
+    private static Song parseLine(CSVRecord record) throws Exception {
         String title = record.get(0);
         String artist = record.get(1);
         int duration = Integer.parseInt(record.get(2));
         String genre = record.get(3);
 
         return new Song(title, artist, duration, genre);
+    }
+
+    public static void exportPlaylistToCsv(Playlist playlist) throws Exception {
+        String fileName = playlist.getName();
+        fileName.trim();
+        fileName = fileName.replace(" ", "_");
+        fileName = fileName + ".csv";
+        List<Song> songs = playlist.getSongs();
+
+        Writer writer = new FileWriter(fileName);
+        writer.write("Title;Artist;Duration[s];Genre\n");
+        for (Song song : songs) {
+            writer.write(song.getTitle() + DELIMITER + song.getArtist() + DELIMITER + song.getDuration() + DELIMITER + song.getGenre() + "\n");
+
+        }
+
+        writer.close();
     }
 }
 
