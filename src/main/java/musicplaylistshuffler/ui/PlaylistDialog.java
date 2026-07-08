@@ -1,28 +1,27 @@
 package musicplaylistshuffler.ui;
 
-import com.sun.tools.javac.Main;
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
-import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.utils.CsvUtils;
 import musicplaylistshuffler.utils.TimeUtils;
 
 import javax.swing.*;
+import javax.swing.event.RowSorterEvent;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlaylistDialog extends JDialog {
 
-    private final Playlist playlist;
-    private final Player player;
-    private final MainFrame mainFrame;
+    private Playlist playlist;
+    private Player player;
+    private MainFrame mainFrame;
+    private MainActionHandler actionHandler;
 
-    public PlaylistDialog(MainFrame owner, Player player, Playlist playlist) {
+    public PlaylistDialog(MainFrame owner, Player player, Playlist playlist, MainActionHandler actionHandler) {
         super(owner, playlist.getName(), true);
 
+        this.actionHandler = actionHandler;
         this.mainFrame = owner;
         this.playlist = playlist;
         this.player = player;
@@ -50,6 +49,7 @@ public class PlaylistDialog extends JDialog {
         setVisible(true);
     }
 
+
     private JPanel createPlaylistControlPanel(){
         JPanel panel = new JPanel(new GridLayout(1,3));
 
@@ -62,6 +62,8 @@ public class PlaylistDialog extends JDialog {
 
         JButton exportToCSVButton = new JButton("Export to CSV");
         exportToCSVButton.setActionCommand("export");
+
+        exportToCSVButton.addActionListener();
         exportToCSVButton.addActionListener(e -> {
             try {
                 CsvUtils.exportPlaylistToCsv(playlist);
@@ -74,14 +76,9 @@ public class PlaylistDialog extends JDialog {
         JButton deletePlaylistButton = new JButton("Delete Playlist");
         deletePlaylistButton.setActionCommand("deletePlaylist");
         deletePlaylistButton.addActionListener(e -> {
-            System.out.println("Test");
-            //player.removePlaylist(playlist);
-            player.addPlaylist(playlist);
-
-            mainFrame.refreshPlayerView();
+            player.removePlaylist(playlist);
             dispose();
         });
-
 
         panel.add(playPlaylistButton);
         panel.add(exportToCSVButton);
@@ -121,15 +118,10 @@ public class PlaylistDialog extends JDialog {
         }
 
         JTable songTable = new JTable(data, columnNames) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
 
-            public boolean isColumnEditable(int column) {
-                return true;
-            }
         };
+
+        songTable.setUpdateSelectionOnSort(true);
 
         songTable.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent event) {
@@ -138,6 +130,15 @@ public class PlaylistDialog extends JDialog {
                     System.out.println(row);
                     playlist.removeSong(playlist.getCurrentList().get(row));
                     dispose();
+                }
+            }
+        });
+
+        songTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent event) {
+                if (event.getClickCount() == 1) {
+                    songTable.setUpdateSelectionOnSort(true);
+                    songTable.setRowSelectionInterval(0, 0);
                 }
             }
         });

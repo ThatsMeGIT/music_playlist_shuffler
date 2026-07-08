@@ -1,8 +1,10 @@
 package musicplaylistshuffler.ui;
 
 import musicplaylistshuffler.model.Player;
+import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Status;
 import musicplaylistshuffler.storage.StorageService;
+import musicplaylistshuffler.utils.CsvUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -46,6 +48,30 @@ public class MainActionHandler implements ActionListener {
 
 
         mainFrame.refreshPlayerView();
+    }
+
+    public void actionPerformed(ActionEvent e, Playlist playlist){
+        switch (e.getActionCommand()) {
+            case "exportPlaylist":
+                try {
+                    CsvUtils.exportPlaylistToCsv(playlist);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+                break;
+            case "deletePlaylist":
+                player.removePlaylist(playlist);
+                break;
+                case "playPlaylist":
+                    player.playPlaylist(playlist);
+                    break;
+
+            default:
+                System.out.println("Unknown action: " + e.getActionCommand());
+        }
+
+        mainFrame.refreshPlayerView();
+
     }
 
     private void handleAddPlaylist() {

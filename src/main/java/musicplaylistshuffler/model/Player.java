@@ -72,8 +72,7 @@ public class Player {
         if (playlists == null ){
             return;
         }
-        System.out.println("Test");
-        playlists.add(playlist);
+        playlists.remove(playlists);
     }
 
     public boolean addPlaylist(Playlist playlist){
