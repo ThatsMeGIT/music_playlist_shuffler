@@ -3,9 +3,13 @@ package musicplaylistshuffler.model;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class PlayerTest {
 
@@ -119,6 +123,34 @@ class PlayerTest {
 
         assertNull(player.getCurrentSong());
         assertEquals(0, player.getPlayedSeconds());
+    }
+
+    @Test
+    void shouldTogglePlaylistRepeat() {
+        Playlist playlist = new Playlist("Favorites", List.of(song("First Song")));
+        Player player = playerWithPlaylist(playlist);
+
+        player.repeatAll();
+        assertTrue(playlist.isOnRepeat());
+        player.repeatAll();
+        assertFalse(playlist.isOnRepeat());
+    }
+
+    @Test
+    void shouldIgnoreRepeatWhenNoPlaylistExists() {
+        Player player = new Player(0, null, List.of(), 0, 0, Status.PAUSED);
+        assertDoesNotThrow(player::repeatAll);
+    }
+
+    @Test
+    void shouldRemoveOnlySelectedPlaylist() {
+        Playlist first = new Playlist("First", List.of(song("Song")));
+        Playlist second = new Playlist("Second", List.of(song("Song")));
+        Player player = new Player(0, null, new ArrayList<>(List.of(first, second)),
+                0, 0, Status.PAUSED);
+
+        player.removePlaylist(first);
+        assertEquals(List.of(second), player.getPlaylists());
     }
 
     private static Player playerAtSongIndex(int currentSongIndex, Status status) {

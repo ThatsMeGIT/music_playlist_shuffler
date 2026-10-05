@@ -16,6 +16,7 @@ public class Playlist {
     private final List<Song> songs;
     private List<Song> shuffledSongs;
     private Mode mode;
+    private Loop loop;
 
     @JsonCreator
     public Playlist(@JsonProperty("name") String name,
@@ -86,9 +87,22 @@ public class Playlist {
         shuffledSongs = null;
     }
 
+    public void repeatOn() {
+        loop = Loop.REPEAT_ON;
+    }
+
+    public void repeatOff() {
+        loop = Loop.REPEAT_OFF;
+    }
+
     @JsonIgnore
     public boolean isShuffled() {
         return mode == Mode.SHUFFLED;
+    }
+
+    @JsonIgnore
+    public boolean isOnRepeat() {
+        return loop == Loop.REPEAT_ON;
     }
 
     @JsonIgnore
@@ -123,6 +137,7 @@ public class Playlist {
             shuffleOn();
         }
     }
+
 
     public String getName() {
         return name;

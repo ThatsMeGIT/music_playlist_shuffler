@@ -4,6 +4,7 @@ import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.utils.TimeUtils;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.net.URL;
 
@@ -16,15 +17,16 @@ public class PlaybackControlPanel extends JPanel {
     private JLabel artistLabel;
     private JProgressBar progressBar;
     private JToggleButton shuffleButton;
+    private JToggleButton repeatButton;
 
     public PlaybackControlPanel(Player player, MainActionHandler actionHandler) {
         this.player = player;
         this.actionHandler = actionHandler;
 
-        //setLayout(new BorderLayout(20, 0));
-        setLayout(new GridLayout(1, 3, 20, 0));
+        setLayout(new GridLayout(1, 4, 20, 0));
 
         add(createSongInfoPanel());
+        add(createRepeatControlPanel());
         add(createPlaybackControlPanel());
         add(createShuffleControlPanel());
 
@@ -78,6 +80,7 @@ public class PlaybackControlPanel extends JPanel {
         nextButton.setActionCommand("skip");
         nextButton.addActionListener(actionHandler);
 
+
         progressBar = new JProgressBar(0, 100);
         progressBar.setEnabled(false);
         progressBar.setStringPainted(true);
@@ -105,10 +108,23 @@ public class PlaybackControlPanel extends JPanel {
         return panel;
     }
 
+    private JPanel createRepeatControlPanel() {
+        JPanel panel = new JPanel(new BorderLayout(10, 0));
+
+        repeatButton = new JToggleButton("><");
+        repeatButton.setActionCommand("repeat");
+        repeatButton.addActionListener(actionHandler);
+
+        panel.add(repeatButton, BorderLayout.EAST);
+
+        return panel;
+    }
+
     public void refreshPlayerView() {
         songTitleLabel.setText(player.getCurrentSong().getTitle());
         artistLabel.setText(player.getCurrentSong().getArtist());
         shuffleButton.setSelected(player.getCurrentPlaylist().isShuffled());
+        repeatButton.setSelected(player.getCurrentPlaylist().isOnRepeat());
 
         progressBar.setMaximum(player.getCurrentSong().getDuration());
         progressBar.setValue(player.getPlayedSeconds());

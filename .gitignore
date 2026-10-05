@@ -186,3 +186,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,java,intellij
+
+# Maven build output and local dependency cache
+/target/
+/repository/

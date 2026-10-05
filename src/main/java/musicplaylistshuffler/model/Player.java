@@ -14,6 +14,13 @@ public class Player {
     private int currentPlaylistIndex;
     private int currentSongIndex;
     private Status status;
+    private Loop loop;
+
+    public Player(int playedSeconds, Song currentSong, List<Playlist> playlists,
+                  int currentPlaylistIndex, int currentSongIndex, Status status) {
+        this(playedSeconds, currentSong, playlists, currentPlaylistIndex,
+                currentSongIndex, status, Loop.REPEAT_OFF);
+    }
 
     @JsonCreator
     public Player(
@@ -22,7 +29,8 @@ public class Player {
             @JsonProperty("playlists") List<Playlist> playlists,
             @JsonProperty("currentPlaylistIndex") int currentPlaylistIndex,
             @JsonProperty("currentSongIndex") int currentSongIndex,
-            @JsonProperty("status") Status status
+            @JsonProperty("status") Status status,
+            @JsonProperty("loop") Loop loop
     ) {
         this.playedSeconds = playedSeconds;
         this.currentSong = currentSong;
@@ -30,6 +38,7 @@ public class Player {
         this.currentPlaylistIndex = currentPlaylistIndex;
         this.currentSongIndex = currentSongIndex;
         this.status = status != null ? status : Status.PAUSED;
+        this.loop = loop != null ? loop : Loop.REPEAT_OFF;
     }
 
     public void playPlaylist(Playlist playlist) {
@@ -72,7 +81,7 @@ public class Player {
         if (playlists == null ){
             return;
         }
-        playlists.remove(playlists);
+        playlists.remove(playlist);
     }
 
     public boolean addPlaylist(Playlist playlist){
@@ -106,6 +115,21 @@ public class Player {
         status = Status.PAUSED;
     }
 
+    public void repeatAll() {
+        Playlist currentPlaylist = getCurrentPlaylist();
+        if (currentPlaylist == null) {
+            return;
+        }
+
+        if (currentPlaylist.isOnRepeat()) {
+            currentPlaylist.repeatOff();
+            loop = Loop.REPEAT_OFF;
+        } else  {
+            loop = Loop.REPEAT_ON;
+            currentPlaylist.repeatOn();
+        }
+    }
+
     public void skip() {
         Playlist currentPlaylist = getCurrentPlaylist();
 
@@ -117,8 +141,12 @@ public class Player {
 
         currentSongIndex++;
 
-        if (currentSongIndex >= currentPlaylist.getCurrentList().size()) {
+        if (loop == Loop.REPEAT_OFF && currentSongIndex >= currentPlaylist.getCurrentList().size()) {
+            pause();
             currentSongIndex = 0;
+        } else if (loop == Loop.REPEAT_ON && currentSongIndex >= currentPlaylist.getCurrentList().size()) {
+            currentSongIndex = 0;
+            play();
         }
 
         currentSong = currentPlaylist.getSpecificSong(currentSongIndex);
@@ -144,6 +172,7 @@ public class Player {
         playedSeconds = 0;
     }
 
+    @JsonIgnore
     public Playlist getCurrentPlaylist() {
         if (playlists == null || playlists.isEmpty()) {
             return null;
