@@ -63,7 +63,6 @@ public class PlaylistDialog extends JDialog {
         JButton exportToCSVButton = new JButton("Export to CSV");
         exportToCSVButton.setActionCommand("export");
 
-        exportToCSVButton.addActionListener();
         exportToCSVButton.addActionListener(e -> {
             try {
                 CsvUtils.exportPlaylistToCsv(playlist);
