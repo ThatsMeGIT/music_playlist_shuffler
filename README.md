@@ -45,6 +45,27 @@ mvn test
 
 Tests sind für die Modelle `Player`, `Playlist` und `Song` sowie den CSV-Import vorhanden.
 
+## Automatische Qualitätsprüfung
+
+```bash
+mvn --batch-mode --no-transfer-progress clean verify -DfailIfNoTests=true
+```
+
+Dieser Befehl baut das Projekt, führt die JUnit-Tests aus und prüft anschließend
+Produktionscode und Tests mit Checkstyle. Der bestehende GitHub-Workflow führt
+dieselbe Prüfung bei jedem Push und Pull Request aus. Fehler in Tests oder
+Checkstyle-Verstöße lassen die Prüfung fehlschlagen; die Details stehen im
+Actions-Protokoll.
+
+Die Regeln in `config/checkstyle/checkstyle.xml` prüfen unbenutzte und redundante
+Imports, leere Anweisungen, zusammengehörige `equals`-/`hashCode`-Methoden,
+unbeabsichtigtes Durchfallen in `switch`-Anweisungen und mehrere Anweisungen
+in einer Zeile. Nur den Linter ausführen: `mvn checkstyle:check`.
+
+Checkstyle ist kostenlos. Für dieses öffentliche Repository sind auch die
+verwendeten Standard-GitHub-Actions-Runner kostenlos. Die Prüfung ergänzt
+CodeRabbit-Reviews und benötigt keinen API-Schlüssel oder kostenpflichtigen Dienst.
+
 ## Projektstruktur
 
 - `model/` – Songs, Playlists und Player-Zustand
