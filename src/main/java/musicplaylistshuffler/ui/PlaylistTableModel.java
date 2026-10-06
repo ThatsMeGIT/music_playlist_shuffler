@@ -2,7 +2,6 @@ package musicplaylistshuffler.ui;
 
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
-import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.utils.TimeUtils;
 
 import javax.swing.*;

@@ -6,7 +6,6 @@ import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.utils.CsvUtils;
 import musicplaylistshuffler.utils.JsonUtils;
 
-import java.io.IOException;
 import java.util.List;
 
 public class StorageService{

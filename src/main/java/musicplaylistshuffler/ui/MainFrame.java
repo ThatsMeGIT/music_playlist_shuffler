@@ -5,7 +5,6 @@ import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.storage.StorageService;
 
 import javax.swing.*;
-import javax.xml.xpath.XPath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
