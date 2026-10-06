@@ -4,7 +4,6 @@ import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.utils.TimeUtils;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.net.URL;
 
