@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   junit:
-    name: JUnit Tests
+    name: Tests and Code Quality
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -28,5 +28,5 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Build and run JUnit tests
+      - name: Build, run JUnit tests and check code quality
         run: mvn --batch-mode --no-transfer-progress clean verify -DfailIfNoTests=true

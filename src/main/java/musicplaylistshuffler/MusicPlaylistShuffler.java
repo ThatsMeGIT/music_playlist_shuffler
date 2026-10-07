@@ -4,7 +4,6 @@ import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.model.Status;
-import musicplaylistshuffler.storage.StorageService;
 import musicplaylistshuffler.ui.MainFrame;
 
 import java.util.List;
