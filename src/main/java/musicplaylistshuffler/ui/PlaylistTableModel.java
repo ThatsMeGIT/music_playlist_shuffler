@@ -4,7 +4,6 @@ import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.utils.TimeUtils;
 
-import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 
 public class PlaylistTableModel extends AbstractTableModel {

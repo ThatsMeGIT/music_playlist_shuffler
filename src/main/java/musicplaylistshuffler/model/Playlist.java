@@ -27,6 +27,9 @@ public class Playlist {
         if (songs == null) {
             throw new IllegalArgumentException("songs must not be null");
         }
+        if (songs.stream().anyMatch(song -> song == null)) {
+            throw new IllegalArgumentException("songs must not contain null");
+        }
 
         this.name = name;
         this.songs = new ArrayList<>(songs);
