@@ -6,6 +6,7 @@ import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.model.Status;
 import musicplaylistshuffler.storage.StorageService;
 import musicplaylistshuffler.ui.MainFrame;
+import musicplaylistshuffler.ui.UiStyle;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -27,6 +28,7 @@ public class MusicPlaylistShuffler {
         Player fallback = new Player(1, song1, List.of(playlist1, playlist2), 0, 0, Status.PAUSED);
         StorageService.StartupState startup = StorageService.loadPlayerForStartup(path, fallback);
         SwingUtilities.invokeLater(() -> {
+            UiStyle.install();
             if (!startup.saveAllowed()) {
                 JOptionPane.showMessageDialog(null,
                         "Could not load saved playlists. Starting with sample playlists.\n"

@@ -24,34 +24,43 @@ public class PlaylistDialog extends JDialog {
         this.playlist = playlist;
         this.player = player;
 
-        setSize(600, 300);
+        setSize(720, 460);
+        setMinimumSize(new Dimension(600, 420));
         setLocationRelativeTo(owner);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         JTabbedPane tabs = new JTabbedPane();
 
-        JPanel playlistPanel = new JPanel(new BorderLayout());
+        JPanel playlistPanel = UiStyle.panel(new BorderLayout(0, UiStyle.GAP), UiStyle.BACKGROUND);
+        playlistPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 
 
         playlistPanel.add(createPlaylistOverviewPanel(), BorderLayout.NORTH);
         playlistPanel.add(createSongTablePanel(), BorderLayout.CENTER);
 
-        JPanel statPanel = new JPanel();
-        statPanel.add(createStatPanel());
+        JPanel statPanel = UiStyle.panel(new BorderLayout(), UiStyle.BACKGROUND);
+        statPanel.add(createStatPanel(), BorderLayout.NORTH);
 
         tabs.addTab("Overview", playlistPanel);
         tabs.addTab("Details", statPanel);
 
-        add(tabs);
+        tabs.setUI(new PixelTabsUi());
+        tabs.setFont(UiStyle.BODY_FONT);
+        tabs.setForeground(UiStyle.TEXT);
+        tabs.setBackground(UiStyle.BACKGROUND);
+        JPanel content = UiStyle.panel(new BorderLayout(), UiStyle.BACKGROUND);
+        content.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+        content.add(tabs, BorderLayout.CENTER);
+        add(content);
 
         setVisible(true);
     }
 
 
     private JPanel createPlaylistControlPanel(){
-        JPanel panel = new JPanel(new GridLayout(1,3));
+        JPanel panel = UiStyle.panel(new FlowLayout(FlowLayout.LEFT, 8, 0), UiStyle.BACKGROUND);
 
-        JButton playPlaylistButton = new JButton("▶");
+        JButton playPlaylistButton = new JButton("Play playlist");
         playPlaylistButton.setActionCommand("playPlaylist");
         playPlaylistButton.addActionListener(e -> {
             actionHandler.actionPerformed(e, playlist);
@@ -73,6 +82,11 @@ public class PlaylistDialog extends JDialog {
             dispose();
         });
 
+        UiStyle.button(playPlaylistButton, "Start playing this playlist", true);
+        UiStyle.button(exportToCSVButton, "Export this playlist to CSV", false);
+        UiStyle.button(deletePlaylistButton, "Delete this playlist", false);
+        deletePlaylistButton.setForeground(UiStyle.DANGER);
+
         panel.add(playPlaylistButton);
         panel.add(exportToCSVButton);
         panel.add(deletePlaylistButton);
@@ -80,22 +94,24 @@ public class PlaylistDialog extends JDialog {
         return panel;
     }
 
-    private JPanel createPlaylistOverviewPanel(){
-        JPanel panel = new JPanel(new GridLayout(3,1));
-
-        JLabel name = new JLabel(playlist.getName());
-        JLabel description = new JLabel(playlist.getDescription());
-
-        panel.add(createPlaylistControlPanel());
-        panel.add(name);
-        panel.add(description);
-
+    private JPanel createPlaylistOverviewPanel() {
+        JPanel panel = UiStyle.panel(new BorderLayout(0, UiStyle.GAP), UiStyle.BACKGROUND);
+        JPanel metadata = UiStyle.panel(new BorderLayout(0, 4), UiStyle.BACKGROUND);
+        JLabel name = UiStyle.heading(playlist.getName(), 22f);
+        name.setToolTipText(playlist.getName());
+        JLabel description = UiStyle.secondary(playlist.getDescription());
+        description.setToolTipText(playlist.getDescription());
+        metadata.add(name, BorderLayout.NORTH);
+        if (playlist.getDescription() != null && !playlist.getDescription().isBlank()) {
+            metadata.add(description, BorderLayout.SOUTH);
+        }
+        panel.add(metadata, BorderLayout.NORTH);
+        panel.add(createPlaylistControlPanel(), BorderLayout.SOUTH);
         return panel;
-
     }
 
     private JPanel createSongTablePanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = UiStyle.panel(new BorderLayout(0, 8), UiStyle.BACKGROUND);
 
         String[] columnNames = {"Title", "Artist", "Genre", "Duration"};
 
@@ -128,27 +144,34 @@ public class PlaylistDialog extends JDialog {
             }
         });
 
-        JScrollPane scrollPane = new JScrollPane(songTable);
+        songTable.getColumnModel().getColumn(0).setPreferredWidth(240);
+        songTable.getColumnModel().getColumn(1).setPreferredWidth(180);
+        songTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+        songTable.getColumnModel().getColumn(3).setPreferredWidth(112);
+        songTable.getColumnModel().getColumn(3).setMinWidth(112);
+        JScrollPane scrollPane = UiStyle.table(songTable, 3);
 
         panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(UiStyle.secondary("Double-click a song to remove it from this playlist."), BorderLayout.SOUTH);
 
         return panel;
     }
 
     private JPanel createStatPanel() {
-        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel panel = UiStyle.panel(new GridLayout(4, 2, 16, 16), UiStyle.SURFACE);
+        panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(UiStyle.BORDER),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)));
 
-        panel.add(new JLabel("Number of Songs:"));
+        panel.add(UiStyle.secondary("Number of Songs:"));
         panel.add(new JLabel(String.valueOf(playlist.getSongs().size())));
 
-        panel.add(new JLabel("Total Length:"));
+        panel.add(UiStyle.secondary("Total Length:"));
         panel.add(new JLabel(TimeUtils.formatDuration(playlist.playlistTimeLength())));
 
-        panel.add(new JLabel("Average Song Length:"));
+        panel.add(UiStyle.secondary("Average Song Length:"));
         panel.add(new JLabel(TimeUtils.formatDuration((int) playlist.averageSongLength())));
 
-        panel.add(new JLabel("Top Genre:"));
+        panel.add(UiStyle.secondary("Top Genre:"));
         panel.add(new JLabel(playlist.topGenre() != null ? playlist.topGenre() : "-"));
 
         return panel;
