@@ -2,7 +2,6 @@ package musicplaylistshuffler.ui;
 
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
-import musicplaylistshuffler.storage.StorageService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,8 +12,6 @@ import java.net.URL;
 public class MainFrame extends JFrame {
 
     private final Player player;
-    private final String path;
-    private final boolean saveOnClose;
 
     private final MainActionHandler actionHandler;
     private final PlaybackControlPanel playbackControlPanel;
@@ -28,8 +25,6 @@ public class MainFrame extends JFrame {
 
     public MainFrame(Player player, String path, boolean saveOnClose) {
         this.player = player;
-        this.path = path;
-        this.saveOnClose = saveOnClose;
         this.actionHandler = new MainActionHandler(player, this);
         this.playbackControlPanel = new PlaybackControlPanel(player, actionHandler);
         this.menuBar = new MenuBar(actionHandler);
@@ -52,14 +47,18 @@ public class MainFrame extends JFrame {
         setTitle("Best Music Player");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
+        CloseHandler closeHandler = new CloseHandler(player, path, saveOnClose, () -> {
+            dispose();
+            System.exit(0);
+        }, () -> JOptionPane.showMessageDialog(MainFrame.this,
+                "Could not save playlists. The window will stay open so you can try again.\n"
+                        + "Check that the save folder is accessible and writable.",
+                "Could not save playlists", JOptionPane.ERROR_MESSAGE),
+                saving -> setEnabled(!saving));
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                if (saveOnClose) {
-                    StorageService.savePlayerToJson(player, path);
-                }
-                dispose();
-                System.exit(0);
+                closeHandler.requestClose();
             }
         });
 
