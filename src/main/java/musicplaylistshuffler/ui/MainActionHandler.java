@@ -2,6 +2,7 @@ package musicplaylistshuffler.ui;
 
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
+import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.model.Status;
 import musicplaylistshuffler.storage.StorageService;
 import musicplaylistshuffler.utils.CsvUtils;
@@ -10,6 +11,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActionHandler implements ActionListener {
 
@@ -64,11 +67,7 @@ public class MainActionHandler implements ActionListener {
     public void actionPerformed(ActionEvent e, Playlist playlist) {
         switch (e.getActionCommand()) {
             case "exportPlaylist":
-                try {
-                    CsvUtils.exportPlaylistToCsv(playlist);
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+                handleExportPlaylist(playlist);
                 break;
             case "deletePlaylist":
                 player.removePlaylist(playlist);
@@ -99,6 +98,12 @@ public class MainActionHandler implements ActionListener {
             return;
         }
 
+        String csvPath = fileChooser.getSelectedFile().getAbsolutePath();
+        if (!csvPath.toLowerCase(Locale.ROOT).endsWith(".csv")) {
+            showError("Unsupported file", "Please choose a CSV file (*.csv) to import a playlist.");
+            return;
+        }
+
         String playlistName = JOptionPane.showInputDialog(
                 mainFrame,
                 "Enter playlist name:",
@@ -111,23 +116,48 @@ public class MainActionHandler implements ActionListener {
             return;
         }
 
-        String csvPath = fileChooser.getSelectedFile().getAbsolutePath();
-
-        boolean success = StorageService.addNewPlaylistFromCsv(
-                player,
-                csvPath,
-                playlistName
-        );
-
-
-
-        if (success) {
+        mainFrame.setEnabled(false);
+        Runnable onFailure = () -> {
+            mainFrame.setEnabled(true);
+            showError("Could not import playlist",
+                    "Could not import the playlist. Check that the CSV file is readable and contains songs.\n"
+                            + "Each song needs a title, artist, positive duration in seconds and genre.");
+        };
+        new FileOperationWorker<List<Song>>(() -> CsvUtils.loadSongsFromCsv(csvPath), songs -> {
+            mainFrame.setEnabled(true);
+            if (songs == null || songs.isEmpty()
+                    || !player.addPlaylist(new Playlist(playlistName, songs))) {
+                onFailure.run();
+                return;
+            }
+            mainFrame.refreshPlayerView();
             JOptionPane.showMessageDialog(mainFrame, "Playlist added successfully.");
-        } else {
-            JOptionPane.showMessageDialog(mainFrame, "Could not add playlist.");
+        }, onFailure).execute();
+    }
+
+    private void handleExportPlaylist(Playlist playlist) {
+        if (playlist == null) {
+            showError("Could not export playlist", "Choose a playlist to export.");
+            return;
         }
+        Playlist snapshot = new Playlist(playlist.getName(), playlist.getSongs());
+        mainFrame.setEnabled(false);
+        new FileOperationWorker<>(() -> {
+            CsvUtils.exportPlaylistToCsv(snapshot);
+            return true;
+        }, success -> {
+            mainFrame.setEnabled(true);
+            JOptionPane.showMessageDialog(mainFrame, "Playlist exported successfully.");
+        }, () -> {
+            mainFrame.setEnabled(true);
+            showError("Could not export playlist",
+                    "Could not export the playlist. Check that the destination folder is writable\n"
+                            + "and the playlist name can be used as a file name.");
+        }).execute();
+    }
 
-
+    private void showError(String title, String message) {
+        JOptionPane.showMessageDialog(mainFrame, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
     private void handleAddSong() {

@@ -37,6 +37,8 @@ Die Wiedergabe wird derzeit als Zustand im Datenmodell simuliert; eine Audioausg
 
 Beim Start lädt die Anwendung den gespeicherten Player aus `src/main/resources/test.json` und speichert ihn beim Schließen wieder dort. Fehlt die Datei, erstellt sie zwei Beispiel-Playlists. Kann eine vorhandene Datei nicht geladen werden, zeigt die Anwendung einen Hinweis und startet mit Beispiel-Playlists; das automatische Speichern bleibt für diese Sitzung deaktiviert, damit die vorhandenen Daten erhalten bleiben.
 
+Fehler beim Speichern, Importieren und Exportieren werden mit einer Meldung angezeigt. Scheitert das Speichern beim Schließen, bleibt das Fenster offen und die vorherige Wiedergabe wird fortgesetzt. Nach Behebung des Fehlers kann das Schließen erneut versucht werden. Die Dateioperationen laufen im Hintergrund; währenddessen sind die Bedienelemente vorübergehend gesperrt.
+
 ## Tests ausführen
 
 ```bash
@@ -69,7 +71,7 @@ CodeRabbit-Reviews und benötigt keinen API-Schlüssel oder kostenpflichtigen Di
 ## Projektstruktur
 
 - `model/` – Songs, Playlists und Player-Zustand
-- `ui/` – Swing-Oberfläche und Verarbeitung von Benutzeraktionen
+- `ui/` – Swing-Oberfläche und Verarbeitung von Benutzeraktionen; siehe [Paketdokumentation](src/main/java/musicplaylistshuffler/ui/README.md)
 - `storage/` – Laden, Speichern und Playlist-Import
 - `utils/` – CSV- und JSON-Verarbeitung
 - `src/test/` – automatisierte Tests
@@ -77,4 +79,3 @@ CodeRabbit-Reviews und benötigt keinen API-Schlüssel oder kostenpflichtigen Di
 ## Geplante Erweiterungen
 
 - Weitere Tests für Speicherung und Fehlerfälle
-- Verbesserte Fehlermeldungen in der Oberfläche
