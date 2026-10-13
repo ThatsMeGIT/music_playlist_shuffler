@@ -18,6 +18,34 @@ class JsonPlaybackTest {
     Path tempDir;
 
     @Test
+    void clearsInvalidPlaybackSelectionWhenLoadingJson() throws Exception {
+        Path path = tempDir.resolve("invalid-selection.json");
+        Files.writeString(path, """
+                {
+                  "playedSeconds": 42,
+                  "currentSong": {"title":"Absent","artist":"Artist","duration":60,"genre":"Pop"},
+                  "playlists": [{"name":"Favorites","songs":[
+                    {"title":"Present","artist":"Artist","duration":60,"genre":"Pop"}
+                  ]}],
+                  "currentPlaylistIndex": 0,
+                  "currentSongIndex": -2,
+                  "status": "PLAYING",
+                  "loop": "REPEAT_ON"
+                }
+                """);
+
+        Player loaded = JsonUtils.loadPlayerFromJson(path.toString());
+
+        assertNull(loaded.getCurrentSong());
+        assertEquals(0, loaded.getCurrentSongIndex());
+        assertEquals(0, loaded.getPlayedSeconds());
+        assertEquals(Status.PAUSED, loaded.getStatus());
+        assertTrue(loaded.getCurrentPlaylist().isOnRepeat());
+        assertDoesNotThrow(loaded::skip);
+        assertDoesNotThrow(loaded::previous);
+    }
+
+    @Test
     void loadsLegacyJsonWithSongIndexFromShuffleOrder() throws Exception {
         Path path = tempDir.resolve("legacy.json");
         Files.writeString(path, """

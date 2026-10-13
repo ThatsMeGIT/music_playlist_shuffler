@@ -191,12 +191,15 @@ class PlayerTest {
     void shouldToggleShuffleOnEmptyPlaylistWithoutCrashing() {
         Playlist playlist = new Playlist("Empty", List.of());
         Player player = playerWithPlaylist(playlist);
+        player.play();
 
         assertDoesNotThrow(player::toggleShuffle);
 
         assertTrue(playlist.isShuffled());
         assertNull(player.getCurrentSong());
         assertEquals(0, player.getCurrentSongIndex());
+        assertEquals(0, player.getPlayedSeconds());
+        assertEquals(Status.PAUSED, player.getStatus());
     }
 
     @Test
@@ -206,12 +209,15 @@ class PlayerTest {
                 List.of(song("First Song"))
         );
         Player player = playerWithPlaylist(playlist);
+        player.play();
 
         assertDoesNotThrow(player::toggleShuffle);
 
         assertTrue(playlist.isShuffled());
         assertNull(player.getCurrentSong());
         assertEquals(0, player.getCurrentSongIndex());
+        assertEquals(0, player.getPlayedSeconds());
+        assertEquals(Status.PAUSED, player.getStatus());
     }
 
 }

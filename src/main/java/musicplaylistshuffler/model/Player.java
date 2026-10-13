@@ -41,19 +41,27 @@ public class Player {
         this.currentSongIndex = currentSongIndex;
         this.status = status != null ? status : Status.PAUSED;
         this.loop = loop != null ? loop : Loop.REPEAT_OFF;
-        if (this.playlists != null && currentPlaylistIndex >= 0
-                && currentPlaylistIndex < this.playlists.size()) {
-            Playlist playlist = this.playlists.get(currentPlaylistIndex);
-            if (currentSong != null) {
-                int songIndex = findSongIndex(playlist.getCurrentList(), currentSong, currentSongIndex);
-                if (songIndex >= 0) {
-                    this.currentSongIndex = songIndex;
-                    this.currentSong = playlist.getSpecificSong(songIndex);
-                }
-            }
-            if (this.loop == Loop.REPEAT_ON) {
-                playlist.repeatOn();
-            }
+        if (this.playlists != null && this.playlists.stream().anyMatch(playlist -> playlist == null)) {
+            throw new IllegalArgumentException("playlists must not contain null");
+        }
+        if (this.playlists == null || currentPlaylistIndex < 0
+                || currentPlaylistIndex >= this.playlists.size()) {
+            this.currentPlaylistIndex = 0;
+            clearPlayback();
+            return;
+        }
+
+        Playlist playlist = this.playlists.get(currentPlaylistIndex);
+        int songIndex = currentSong == null ? -1
+                : findSongIndex(playlist.getCurrentList(), currentSong, currentSongIndex);
+        if (songIndex < 0) {
+            clearPlayback();
+        } else {
+            this.currentSongIndex = songIndex;
+            this.currentSong = playlist.getSpecificSong(songIndex);
+        }
+        if (this.loop == Loop.REPEAT_ON) {
+            playlist.repeatOn();
         }
     }
 

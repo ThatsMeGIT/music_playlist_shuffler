@@ -14,6 +14,7 @@ public class MainFrame extends JFrame {
 
     private final Player player;
     private final String path;
+    private final boolean saveOnClose;
 
     private final MainActionHandler actionHandler;
     private final PlaybackControlPanel playbackControlPanel;
@@ -22,8 +23,13 @@ public class MainFrame extends JFrame {
     private final JTable playlistTable;
 
     public MainFrame(Player player, String path) {
+        this(player, path, true);
+    }
+
+    public MainFrame(Player player, String path, boolean saveOnClose) {
         this.player = player;
         this.path = path;
+        this.saveOnClose = saveOnClose;
         this.actionHandler = new MainActionHandler(player, this);
         this.playbackControlPanel = new PlaybackControlPanel(player, actionHandler);
         this.menuBar = new MenuBar(actionHandler);
@@ -49,7 +55,9 @@ public class MainFrame extends JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                StorageService.savePlayerToJson(player, path);
+                if (saveOnClose) {
+                    StorageService.savePlayerToJson(player, path);
+                }
                 dispose();
                 System.exit(0);
             }

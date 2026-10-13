@@ -19,6 +19,9 @@ class PlayerConsistencyTest {
         assertSame(second, playlist.getSpecificSong(player.getCurrentSongIndex()));
         assertEquals(30, player.getPlayedSeconds());
         assertEquals(List.of(first, second), playlist.getSongs());
+        assertEquals(playlist.getSongs().size(), playlist.getCurrentList().size());
+        assertTrue(playlist.getCurrentList().containsAll(playlist.getSongs()));
+        assertEquals(Status.PLAYING, player.getStatus());
 
         player.toggleShuffle();
         assertSame(second, player.getCurrentSong());

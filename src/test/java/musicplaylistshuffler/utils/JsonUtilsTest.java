@@ -1,12 +1,15 @@
 package musicplaylistshuffler.utils;
 
 import musicplaylistshuffler.model.Player;
+import musicplaylistshuffler.model.Playlist;
+import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.model.Status;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,10 +39,11 @@ class JsonUtilsTest {
 
     @Test
     void loadPlayerFromJsonReturnsSavedPlayer() throws Exception {
+        Song song = new Song("Title", "Artist", 180, "Pop");
         Player player = new Player(
                 42,
-                null,
-                new ArrayList<>(),
+                song,
+                List.of(new Playlist("Favorites", List.of(song))),
                 0,
                 0,
                 Status.PLAYING
@@ -55,7 +59,7 @@ class JsonUtilsTest {
         assertEquals(42, loadedPlayer.getPlayedSeconds());
         assertEquals(Status.PLAYING, loadedPlayer.getStatus());
         assertNotNull(loadedPlayer.getPlaylists());
-        assertEquals(0, loadedPlayer.getPlaylists().size());
+        assertEquals(1, loadedPlayer.getPlaylists().size());
     }
 
     @Test

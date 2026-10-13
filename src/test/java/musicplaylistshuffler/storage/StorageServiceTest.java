@@ -3,12 +3,14 @@ package musicplaylistshuffler.storage;
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Status;
 import musicplaylistshuffler.model.Playlist;
+import musicplaylistshuffler.model.Song;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,10 +54,11 @@ class StorageServiceTest {
 
     @Test
     void loadPlayerFromJsonExistingFileReturnsPlayer() {
+        Song song = new Song("Title", "Artist", 180, "Pop");
         Player player = new Player(
                 42,
-                null,
-                new ArrayList<>(),
+                song,
+                List.of(new Playlist("Favorites", List.of(song))),
                 0,
                 0,
                 Status.PLAYING

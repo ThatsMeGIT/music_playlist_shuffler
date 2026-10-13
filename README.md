@@ -35,7 +35,7 @@ Die Wiedergabe wird derzeit als Zustand im Datenmodell simuliert; eine Audioausg
 
 3. Die Klasse `musicplaylistshuffler.MusicPlaylistShuffler` starten. Als Arbeitsverzeichnis das Projektverzeichnis verwenden.
 
-Beim Start erstellt die Anwendung zwei Beispiel-Playlists. Player-Daten können über die JSON-Speicherung gesichert werden.
+Beim Start lädt die Anwendung den gespeicherten Player aus `src/main/resources/test.json` und speichert ihn beim Schließen wieder dort. Fehlt die Datei, erstellt sie zwei Beispiel-Playlists. Kann eine vorhandene Datei nicht geladen werden, zeigt die Anwendung einen Hinweis und startet mit Beispiel-Playlists; das automatische Speichern bleibt für diese Sitzung deaktiviert, damit die vorhandenen Daten erhalten bleiben.
 
 ## Tests ausführen
 

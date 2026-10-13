@@ -4,8 +4,10 @@ import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
 import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.model.Status;
+import musicplaylistshuffler.storage.StorageService;
 import musicplaylistshuffler.ui.MainFrame;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import java.util.List;
 
@@ -22,7 +24,16 @@ public class MusicPlaylistShuffler {
         Playlist playlist1 = new Playlist("2. Playlist ", songs);
         Playlist playlist2 = new Playlist("1. Playlist ", songs);
 
-        Player player = new Player(1, song1, List.of(playlist1, playlist2), 0, 0, Status.PAUSED);
-        SwingUtilities.invokeLater(() -> new MainFrame(player, path));
+        Player fallback = new Player(1, song1, List.of(playlist1, playlist2), 0, 0, Status.PAUSED);
+        StorageService.StartupState startup = StorageService.loadPlayerForStartup(path, fallback);
+        SwingUtilities.invokeLater(() -> {
+            if (!startup.saveAllowed()) {
+                JOptionPane.showMessageDialog(null,
+                        "Could not load saved playlists. Starting with sample playlists.\n"
+                                + "Automatic saving is disabled to preserve the existing file.",
+                        "Could not load playlists", JOptionPane.WARNING_MESSAGE);
+            }
+            new MainFrame(startup.player(), path, startup.saveAllowed());
+        });
     }
 }
