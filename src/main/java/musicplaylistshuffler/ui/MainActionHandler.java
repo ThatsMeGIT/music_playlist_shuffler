@@ -21,6 +21,7 @@ public class MainActionHandler implements ActionListener {
         this.mainFrame = mainFrame;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "repeat":
@@ -60,7 +61,7 @@ public class MainActionHandler implements ActionListener {
         mainFrame.refreshPlayerView();
     }
 
-    public void actionPerformed(ActionEvent e, Playlist playlist){
+    public void actionPerformed(ActionEvent e, Playlist playlist) {
         switch (e.getActionCommand()) {
             case "exportPlaylist":
                 try {
@@ -72,9 +73,9 @@ public class MainActionHandler implements ActionListener {
             case "deletePlaylist":
                 player.removePlaylist(playlist);
                 break;
-                case "playPlaylist":
-                    player.playPlaylist(playlist);
-                    break;
+            case "playPlaylist":
+                player.playPlaylist(playlist);
+                break;
 
             default:
                 System.out.println("Unknown action: " + e.getActionCommand());

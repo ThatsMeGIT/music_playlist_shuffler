@@ -1,6 +1,8 @@
 package musicplaylistshuffler.ui;
 
 import musicplaylistshuffler.model.Player;
+import musicplaylistshuffler.model.Playlist;
+import musicplaylistshuffler.model.Song;
 import musicplaylistshuffler.utils.TimeUtils;
 
 import javax.swing.*;
@@ -17,6 +19,7 @@ public class PlaybackControlPanel extends JPanel {
     private JProgressBar progressBar;
     private JToggleButton shuffleButton;
     private JToggleButton repeatButton;
+    private final Timer playbackTimer;
 
     public PlaybackControlPanel(Player player, MainActionHandler actionHandler) {
         this.player = player;
@@ -29,7 +32,10 @@ public class PlaybackControlPanel extends JPanel {
         add(createPlaybackControlPanel());
         add(createShuffleControlPanel());
 
-        startPlaybackTimer();
+        playbackTimer = new Timer(1000, event -> {
+            player.tick();
+            refreshPlayerView();
+        });
     }
 
     private JPanel createSongInfoPanel() {
@@ -42,9 +48,11 @@ public class PlaybackControlPanel extends JPanel {
             coverUrl = getClass().getResource("/icons/SongCover.png");
         }
 
-        ImageIcon icon = new ImageIcon(coverUrl);
-        Image scaledImage = icon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
-        coverLabel.setIcon(new ImageIcon(scaledImage));
+        if (coverUrl != null) {
+            ImageIcon icon = new ImageIcon(coverUrl);
+            Image scaledImage = icon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+            coverLabel.setIcon(new ImageIcon(scaledImage));
+        }
 
         JPanel textPanel = new JPanel(new GridLayout(2, 1));
 
@@ -120,24 +128,30 @@ public class PlaybackControlPanel extends JPanel {
     }
 
     public void refreshPlayerView() {
-        songTitleLabel.setText(player.getCurrentSong().getTitle());
-        artistLabel.setText(player.getCurrentSong().getArtist());
-        shuffleButton.setSelected(player.getCurrentPlaylist().isShuffled());
-        repeatButton.setSelected(player.getCurrentPlaylist().isOnRepeat());
+        Song song = player.getCurrentSong();
+        Playlist playlist = player.getCurrentPlaylist();
+        songTitleLabel.setText(song != null ? song.getTitle() : "No song selected");
+        artistLabel.setText(song != null ? song.getArtist() : "");
+        shuffleButton.setSelected(playlist != null && playlist.isShuffled());
+        repeatButton.setSelected(playlist != null && playlist.isOnRepeat());
 
-        progressBar.setMaximum(player.getCurrentSong().getDuration());
-        progressBar.setValue(player.getPlayedSeconds());
-
-        progressBar.setString(TimeUtils.formatDuration(player.getPlayedSeconds()) + " / " + TimeUtils.formatDuration(player.getCurrentSong().getDuration())
-        );
+        int duration = song != null ? song.getDuration() : 0;
+        int playedSeconds = song != null ? player.getPlayedSeconds() : 0;
+        progressBar.setMaximum(duration);
+        progressBar.setValue(playedSeconds);
+        progressBar.setString(TimeUtils.formatDuration(playedSeconds)
+                + " / " + TimeUtils.formatDuration(duration));
     }
 
-    private void startPlaybackTimer() {
-        Timer timer = new Timer(1000, event -> {
-            player.tick();
-            refreshPlayerView();
-        });
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        playbackTimer.start();
+    }
 
-        timer.start();
+    @Override
+    public void removeNotify() {
+        playbackTimer.stop();
+        super.removeNotify();
     }
 }

@@ -2,7 +2,6 @@ package musicplaylistshuffler.ui;
 
 import musicplaylistshuffler.model.Player;
 import musicplaylistshuffler.model.Playlist;
-import musicplaylistshuffler.utils.CsvUtils;
 import musicplaylistshuffler.utils.TimeUtils;
 
 import javax.swing.*;
@@ -12,10 +11,10 @@ import java.awt.event.MouseEvent;
 
 public class PlaylistDialog extends JDialog {
 
-    private Playlist playlist;
-    private Player player;
-    private MainFrame mainFrame;
-    private MainActionHandler actionHandler;
+    private final Playlist playlist;
+    private final Player player;
+    private final MainFrame mainFrame;
+    private final MainActionHandler actionHandler;
 
     public PlaylistDialog(MainFrame owner, Player player, Playlist playlist, MainActionHandler actionHandler) {
         super(owner, playlist.getName(), true);
@@ -55,26 +54,22 @@ public class PlaylistDialog extends JDialog {
         JButton playPlaylistButton = new JButton("▶");
         playPlaylistButton.setActionCommand("playPlaylist");
         playPlaylistButton.addActionListener(e -> {
-            player.playPlaylist(playlist);
+            actionHandler.actionPerformed(e, playlist);
             dispose();
         });
 
         JButton exportToCSVButton = new JButton("Export to CSV");
-        exportToCSVButton.setActionCommand("export");
+        exportToCSVButton.setActionCommand("exportPlaylist");
 
         exportToCSVButton.addActionListener(e -> {
-            try {
-                CsvUtils.exportPlaylistToCsv(playlist);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
+            actionHandler.actionPerformed(e, playlist);
             dispose();
         });
 
         JButton deletePlaylistButton = new JButton("Delete Playlist");
         deletePlaylistButton.setActionCommand("deletePlaylist");
         deletePlaylistButton.addActionListener(e -> {
-            player.removePlaylist(playlist);
+            actionHandler.actionPerformed(e, playlist);
             dispose();
         });
 
@@ -115,9 +110,7 @@ public class PlaylistDialog extends JDialog {
             data[i][3] = TimeUtils.formatDuration(song.getDuration());
         }
 
-        JTable songTable = new JTable(data, columnNames) {
-
-        };
+        JTable songTable = new JTable(data, columnNames);
 
         songTable.setUpdateSelectionOnSort(true);
 
@@ -125,18 +118,12 @@ public class PlaylistDialog extends JDialog {
             public void mousePressed(MouseEvent event) {
                 if (event.getClickCount() == 2) {
                     int row = songTable.getSelectedRow();
-                    System.out.println(row);
-                    playlist.removeSong(playlist.getCurrentList().get(row));
-                    dispose();
-                }
-            }
-        });
-
-        songTable.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent event) {
-                if (event.getClickCount() == 1) {
-                    songTable.setUpdateSelectionOnSort(true);
-                    songTable.setRowSelectionInterval(0, 0);
+                    if (row >= 0) {
+                        player.removeSong(playlist,
+                                playlist.getCurrentList().get(songTable.convertRowIndexToModel(row)));
+                        mainFrame.refreshPlayerView();
+                        dispose();
+                    }
                 }
             }
         });

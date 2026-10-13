@@ -20,10 +20,9 @@ public class StorageService{
 
             if (songs == null || songs.isEmpty()) {
                 return false;
-            } else {
-                Playlist playlist = new Playlist(playlistName, songs);
-                return player.addPlaylist(playlist);
             }
+            Playlist playlist = new Playlist(playlistName, songs);
+            return player.addPlaylist(playlist);
 
         } catch (Exception e) {
             System.out.println("Error while creating Playlist from Csv: " + e);

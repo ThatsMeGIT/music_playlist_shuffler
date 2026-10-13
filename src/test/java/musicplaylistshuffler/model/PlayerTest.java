@@ -185,4 +185,33 @@ class PlayerTest {
     private static Song song(String title) {
         return new Song(title, "Artist", 180, "Pop");
     }
+
+
+    @Test
+    void shouldToggleShuffleOnEmptyPlaylistWithoutCrashing() {
+        Playlist playlist = new Playlist("Empty", List.of());
+        Player player = playerWithPlaylist(playlist);
+
+        assertDoesNotThrow(player::toggleShuffle);
+
+        assertTrue(playlist.isShuffled());
+        assertNull(player.getCurrentSong());
+        assertEquals(0, player.getCurrentSongIndex());
+    }
+
+    @Test
+    void shouldToggleShuffleWithoutSelectedSong() {
+        Playlist playlist = new Playlist(
+                "Favorites",
+                List.of(song("First Song"))
+        );
+        Player player = playerWithPlaylist(playlist);
+
+        assertDoesNotThrow(player::toggleShuffle);
+
+        assertTrue(playlist.isShuffled());
+        assertNull(player.getCurrentSong());
+        assertEquals(0, player.getCurrentSongIndex());
+    }
+
 }
