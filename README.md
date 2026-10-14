@@ -13,6 +13,10 @@ Eine Java-Desktopanwendung zur Verwaltung von Musik-Playlists mit einer grafisch
 
 Die Wiedergabe wird derzeit als Zustand im Datenmodell simuliert; eine Audioausgabe ist noch nicht implementiert.
 
+## Oberfläche
+
+Die Swing-Oberfläche verwendet ein dunkles Waldgrün-Theme mit Pixelmotiven, einer dezenten Waldszene, flachen Buttons und einer gruppierten Playerleiste. Farben und Komponentenstile liegen zentral in `UiStyle`; die [Styling-Dokumentation](src/main/java/musicplaylistshuffler/ui/STYLING.md) enthält Gestaltungsregeln, Beispiele und Vorschauen.
+
 ## Technologien
 
 - **Java 17**

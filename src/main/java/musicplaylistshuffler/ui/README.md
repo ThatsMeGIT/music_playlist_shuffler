@@ -6,6 +6,10 @@
 
 Das Paket enthält die Swing-Oberfläche, die Verarbeitung von Benutzeraktionen und die Rückmeldung zu Dateioperationen. Die Fehlerbehandlung aus [Issue #6](https://github.com/ThatsMeGIT/music_playlist_shuffler/issues/6) zeigt verständliche Meldungen und hält das Fenster bei fehlgeschlagenem Speichern offen.
 
+## Gestaltung
+
+Die gemeinsame dunkle Waldgrün-Gestaltung ist in `UiStyle` ausgelagert. Die [Styling-Dokumentation](STYLING.md) beschreibt Farben, Schriftgrößen, Abstände, Komponentenhilfen, Layouts, Zustandsdarstellung und die visuelle Prüfung mit Vorschauen.
+
 ## Verzeichnis
 
 ```text
